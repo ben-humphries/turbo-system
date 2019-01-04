@@ -182,8 +182,8 @@ void Camera::move_in_direction(Direction direction)
 	float speed = 1.0 * sdl_state.delta_time;
 
 	glm::vec3 left_right = glm::normalize(glm::cross(forward, up)) * speed;
-	//glm::vec3 forward_back = forward * speed;
-	glm::vec3 forward_back = glm::normalize(glm::cross(left_right, up)) * speed;
+	glm::vec3 forward_back = glm::vec3(forward.x, 0.0, forward.z) * speed;
+	
 	switch (direction) {
 	case DIR_LEFT:
 		position -= left_right;
@@ -192,10 +192,10 @@ void Camera::move_in_direction(Direction direction)
 		position += left_right;
 		break;
 	case DIR_FORWARD:
-		position -= forward_back;
+		position += forward_back;
 		break;
 	case DIR_BACK:
-		position += forward_back;
+		position -= forward_back;
 		break;
 	}
 
