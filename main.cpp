@@ -80,7 +80,9 @@ void SDL_State::init(int width, int height)
 	window = SDL_CreateWindow("OpenGL",
 							  SDL_WINDOWPOS_UNDEFINED,
 							  SDL_WINDOWPOS_UNDEFINED,
-							  width, height, SDL_WINDOW_OPENGL);
+							  width, height,
+							  SDL_WINDOW_OPENGL);
+	//SDL_SetRelativeMouseMode(SDL_TRUE);
 	gl_context = SDL_GL_CreateContext(window);
 
 	glewExperimental = GL_TRUE;
@@ -264,7 +266,7 @@ int main()
 	glEnableVertexAttribArray(0);
 
 	bool directions[DIR_COUNT] = {0};
-	int last_mouse_x, last_mouse_y = 0;
+	//int last_mouse_x = 0, last_mouse_y = 0;
 	
 	SDL_Event event;
 	bool running = true;
@@ -304,8 +306,21 @@ int main()
 				case SDL_SCANCODE_D:
 					directions[DIR_RIGHT] = false;
 					break;
+				case SDL_SCANCODE_ESCAPE:
+					running = false;
+					break;
 				}
 				break;
+			case SDL_MOUSEMOTION: {
+				/*
+				int x_motion = event.motion.xrel,
+					y_motion = event.motion.yrel;
+				//printf("%d %d | %d %d\n", event.motion.x, event.motion.y, x_motion, y_motion);
+				camera.rotate(x_motion, -y_motion);
+				SDL_WarpMouseInWindow(sdl_state.window,
+									  sdl_state.width / 2,
+									  sdl_state.height / 2);*/
+			} break;
 			}
 		}
 
@@ -315,9 +330,13 @@ int main()
 			}
 		}
 
-		//rotate camera based on mouse movement
-		SDL_GetRelativeMouseState(&last_mouse_x, &last_mouse_y);
-		camera.rotate(last_mouse_x, -last_mouse_y);
+		// Rotate camera based on mouse movement
+		int x, y;
+		SDL_GetMouseState(&x, &y);
+		x -= sdl_state.width / 2;
+		y -= sdl_state.height / 2;
+		SDL_WarpMouseInWindow(sdl_state.window, sdl_state.width / 2, sdl_state.height / 2);
+		camera.rotate(x, -y);
 		
 		// Set uniform
 		glUniformMatrix4fv(glGetUniformLocation(program, "transform"),
@@ -332,7 +351,7 @@ int main()
 			uint64_t new_dt_count = SDL_GetPerformanceCounter();
 			sdl_state.delta_time = (float) (new_dt_count - sdl_state.last_dt_count) / SDL_GetPerformanceFrequency();
 			sdl_state.last_dt_count = new_dt_count;
-			printf("%f                  \r", 1.0 / sdl_state.delta_time);
+			//printf("%f                  \r", 1.0 / sdl_state.delta_time);
 		}
 	}
 	
