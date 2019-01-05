@@ -82,7 +82,7 @@ void SDL_State::init(int width, int height)
 							  SDL_WINDOWPOS_UNDEFINED,
 							  width, height,
 							  SDL_WINDOW_OPENGL);
-	//SDL_SetRelativeMouseMode(SDL_TRUE);
+	SDL_ShowCursor(SDL_FALSE);
 	gl_context = SDL_GL_CreateContext(window);
 
 	glewExperimental = GL_TRUE;
@@ -276,58 +276,25 @@ int main()
 			case SDL_QUIT:
 				running = false;
 				break;
-			case SDL_KEYDOWN:
-				switch (event.key.keysym.scancode) {
-				case SDL_SCANCODE_W:
-					directions[DIR_FORWARD] = true;
-					break;
-				case SDL_SCANCODE_A:
-					directions[DIR_LEFT] = true;
-					break;
-				case SDL_SCANCODE_S:
-					directions[DIR_BACK] = true;
-					break;
-				case SDL_SCANCODE_D:
-					directions[DIR_RIGHT] = true;
-					break;
-				}
-				break;
-			case SDL_KEYUP:
-				switch (event.key.keysym.scancode) {
-				case SDL_SCANCODE_W:
-					directions[DIR_FORWARD] = false;
-					break;
-				case SDL_SCANCODE_A:
-					directions[DIR_LEFT] = false;
-					break;
-				case SDL_SCANCODE_S:
-					directions[DIR_BACK] = false;
-					break;
-				case SDL_SCANCODE_D:
-					directions[DIR_RIGHT] = false;
-					break;
-				case SDL_SCANCODE_ESCAPE:
-					running = false;
-					break;
-				}
-				break;
-			case SDL_MOUSEMOTION: {
-				/*
-				int x_motion = event.motion.xrel,
-					y_motion = event.motion.yrel;
-				//printf("%d %d | %d %d\n", event.motion.x, event.motion.y, x_motion, y_motion);
-				camera.rotate(x_motion, -y_motion);
-				SDL_WarpMouseInWindow(sdl_state.window,
-									  sdl_state.width / 2,
-									  sdl_state.height / 2);*/
-			} break;
 			}
 		}
 
-		for (int i = 0; i < DIR_COUNT; i++) {
-			if (directions[i]) {
-				camera.move_in_direction((Direction) i);
-			}
+		const Uint8 *  keystates = SDL_GetKeyboardState(NULL);
+		
+		if(keystates[SDL_SCANCODE_W]){
+			camera.move_in_direction(DIR_FORWARD);
+		}
+		if(keystates[SDL_SCANCODE_A]){
+			camera.move_in_direction(DIR_LEFT);
+		}
+		if(keystates[SDL_SCANCODE_S]){
+			camera.move_in_direction(DIR_BACK);
+		}
+		if(keystates[SDL_SCANCODE_D]){
+			camera.move_in_direction(DIR_RIGHT);
+		}
+		if(keystates[SDL_SCANCODE_ESCAPE]){
+			running = false;
 		}
 
 		// Rotate camera based on mouse movement
