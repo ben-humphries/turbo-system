@@ -151,6 +151,7 @@ struct Camera {
 	void init(glm::vec3 position, float yaw, float pitch);
 	void update_vectors();
 	void move_in_direction(Direction direction);
+	void rotate(float dx, float dy, bool constrain_pitch = true);
 };
 
 glm::mat4 Camera::get_view_matrix()
@@ -209,6 +210,21 @@ void Camera::move_in_direction(Direction direction)
 		}*/
 }
 
+void Camera::rotate(float dx, float dy, bool constrain_pitch)
+{
+	float mouse_sensitivity = 0.1;
+	yaw = glm::mod(yaw + dx * mouse_sensitivity, 360.0f); //ensure yaw is between 0-360
+	pitch += dy * mouse_sensitivity;
+
+
+	if (constrain_pitch) {
+		if (pitch > 89.0f) pitch = 89.0f;
+		else if (pitch < -89.0f) pitch = -89.0f;
+	}
+
+	update_vectors();
+}
+
 int main()
 {
 	sdl_state.init(800, 600);
@@ -248,6 +264,7 @@ int main()
 	glEnableVertexAttribArray(0);
 
 	bool directions[DIR_COUNT] = {0};
+	int last_mouse_x, last_mouse_y = 0;
 	
 	SDL_Event event;
 	bool running = true;
@@ -297,6 +314,10 @@ int main()
 				camera.move_in_direction((Direction) i);
 			}
 		}
+
+		//rotate camera based on mouse movement
+		SDL_GetRelativeMouseState(&last_mouse_x, &last_mouse_y);
+		camera.rotate(last_mouse_x, -last_mouse_y);
 		
 		// Set uniform
 		glUniformMatrix4fv(glGetUniformLocation(program, "transform"),
