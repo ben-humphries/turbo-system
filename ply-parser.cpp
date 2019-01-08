@@ -170,6 +170,7 @@ Token read_token(Parser * parser)
 
 		// Check for keyword
 		for (int i = 0; i < sizeof(keywords) / sizeof(char*); i++) {
+			if( (end - start) != strlen(keywords[i])) continue;
 			if (strncmp(parser->source + start,
 						keywords[i],
 						end - start) == 0) {
@@ -179,6 +180,7 @@ Token read_token(Parser * parser)
 
 		// Check for type
 		for (int i = 0; i < sizeof(type_names) / sizeof(char*); i++) {
+			if( (end - start) != strlen(type_names[i])) continue;
 			if (strncmp(parser->source + start,
 						type_names[i],
 						end - start) == 0) {
@@ -395,7 +397,7 @@ Mesh * parse_file(Parser * parser)
 	for (int i = 0; i < elements.size(); i++) {
 		auto element = elements[i];
 		if (strcmp(element.name, "vertex") == 0) {
-			mesh->vertices_count = element.count * 3;
+			mesh->vertices_count = element.count * 5;
 			mesh->vertices = (float*) malloc(sizeof(float) * mesh->vertices_count);
 			for (int i = 0; i < mesh->vertices_count; i++) {
 				weak_expect(PLY_FLOAT_LITERAL);

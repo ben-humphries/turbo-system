@@ -17,7 +17,7 @@ void load_model(Model * model){
 
 	//bind vbo and assign vertex and texture data
 	glBindBuffer(GL_ARRAY_BUFFER, model->vbo);
-
+	/*
 	size_t vertices_and_tex_coords_count = model->mesh->vertices_count + model->mesh->texture_coordinates_count;
 	
 	model->vertices_and_tex_coords = (float*) malloc(vertices_and_tex_coords_count * sizeof(float));
@@ -31,8 +31,9 @@ void load_model(Model * model){
 		model->vertices_and_tex_coords[i+3] = model->mesh->texture_coordinates[i - 3*(i/5)];
 		model->vertices_and_tex_coords[i+4] = model->mesh->texture_coordinates[i - 3*(i/5) + 1];
 	}
-
-	glBufferData(GL_ARRAY_BUFFER, vertices_and_tex_coords_count * sizeof(float), model->vertices_and_tex_coords, GL_STATIC_DRAW);
+	*/
+	//glBufferData(GL_ARRAY_BUFFER, vertices_and_tex_coords_count * sizeof(float), model->vertices_and_tex_coords, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, model->mesh->vertices_count * sizeof(float), model->mesh->vertices, GL_STATIC_DRAW);
 	
 	//bind ebo and assign index data
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->ebo);
