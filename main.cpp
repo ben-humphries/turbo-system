@@ -11,6 +11,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "ply-parser.h"
+#include "model.h"
 
 enum Direction {
 	DIR_FORWARD,
@@ -229,6 +230,28 @@ void Camera::rotate(float dx, float dy, bool constrain_pitch)
 	update_vectors();
 }
 
+void test_model(){
+	
+	/* DEBUG */
+	Model * model = (Model *) malloc(sizeof(Model));
+	model->mesh = (Mesh *) malloc(sizeof(Mesh));
+	model->mesh->vertices = new float[9] {1, 2, 3, 4, 5, 6, 7, 8, 9};
+	//printf("%f\n", model->mesh->vertices[0]);
+
+	model->mesh->texture_coordinates = new float[6] {10, 11, 12, 13, 14, 15};
+	model->mesh->indices = (int *) malloc(sizeof(int) * 3);
+	*model->mesh->indices = {0};
+	model->mesh->vertices_count = 9;
+	model->mesh->texture_coordinates_count = 6;
+	model->mesh->indices_count = 3;
+	load_model(model);
+
+	for(int i = 0; i < 15; i++){
+		printf("%f\n", model->vertices_and_tex_coords[i]);
+	}
+	/*       */
+}
+
 int main()
 {
 	sdl_state.init(800, 600);
@@ -272,6 +295,9 @@ int main()
 	
 	SDL_Event event;
 	bool running = true;
+
+	//test_model();
+	
 	while (running) {
 		if (SDL_PollEvent(&event)) {
 			switch (event.type) {

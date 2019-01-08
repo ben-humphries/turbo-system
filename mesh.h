@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 struct Mesh {
 	float * vertices;
 	size_t vertices_count;
