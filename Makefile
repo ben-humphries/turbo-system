@@ -1,2 +1,2 @@
 make:
-	g++ *.cpp -o 3d-platformer -lSDL2 -lGL -lGLEW
+	g++ -g  *.cpp -o 3d-platformer -lSDL2 -lGL -lGLEW
