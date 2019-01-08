@@ -230,28 +230,6 @@ void Camera::rotate(float dx, float dy, bool constrain_pitch)
 	update_vectors();
 }
 
-void test_model(){
-	
-	/* DEBUG */
-	Model * model = (Model *) malloc(sizeof(Model));
-	model->mesh = (Mesh *) malloc(sizeof(Mesh));
-	model->mesh->vertices = new float[9] {1, 2, 3, 4, 5, 6, 7, 8, 9};
-	//printf("%f\n", model->mesh->vertices[0]);
-
-	model->mesh->texture_coordinates = new float[6] {10, 11, 12, 13, 14, 15};
-	model->mesh->indices = (int *) malloc(sizeof(int) * 3);
-	*model->mesh->indices = {0};
-	model->mesh->vertices_count = 9;
-	model->mesh->texture_coordinates_count = 6;
-	model->mesh->indices_count = 3;
-	load_model(model);
-
-	for(int i = 0; i < 15; i++){
-		printf("%f\n", model->vertices_and_tex_coords[i]);
-	}
-	/*       */
-}
-
 int main()
 {
 	sdl_state.init(800, 600);
@@ -275,28 +253,14 @@ int main()
 	}
 	glUseProgram(program);
 
-	// Cube
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	// Attributes
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*) 0);
-	glEnableVertexAttribArray(0);
-
 	bool directions[DIR_COUNT] = {0};
-	//int last_mouse_x = 0, last_mouse_y = 0;
 	
 	SDL_Event event;
 	bool running = true;
 
-	//test_model();
+	Model * model = (Model *) malloc(sizeof(Model));
+	model->mesh = PLY::load_mesh_from_ply_file("example.ply");
+	load_model(model);
 	
 	while (running) {
 		if (SDL_PollEvent(&event)) {
@@ -336,9 +300,12 @@ int main()
 		// Set uniform
 		glUniformMatrix4fv(glGetUniformLocation(program, "transform"),
 						   1, GL_FALSE, glm::value_ptr(projection_matrix * camera.get_view_matrix()));
-		
+
+		glClearColor(0.0,0.0,0.0,1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		
+		render_model(model);
+		
 		SDL_GL_SwapWindow(sdl_state.window);
 		
 		// delta time

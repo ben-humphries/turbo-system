@@ -408,14 +408,14 @@ Mesh * parse_file(Parser * parser)
 			 * items... there's probably a cleaner way to do this but
 			 * for now it's OK.  
 			 *   -Paul T. Tue Jan 8 06:04:09 2019 */
-			mesh->indices_count = element.count * 4;
+			mesh->indices_count = element.count * 3;
 			mesh->indices = (int*) malloc(sizeof(int) * mesh->indices_count);
-			for (int i = 0; i < element.count * 5; i++) {
-				if (i % 5 == 0) {
+			for (int i = 0; i < element.count * 4; i++) {
+				if (i % 4 == 0) {
 					expect(PLY_INT_LITERAL);
 				} else {
 					weak_expect(PLY_INT_LITERAL);
-					mesh->indices[i - 1 - (i / 5)] = current().int_literal;
+					mesh->indices[i - 1 - (i / 4)] = current().int_literal;
 					advance();
 				}
 			}
@@ -431,7 +431,7 @@ Mesh * parse_file(Parser * parser)
 
 	// If the file did not specify any texture coordinates, specify dummy ones.
 	if (!found_uv) {
-		mesh->texture_coordinates_count = mesh->indices_count / 2;
+		mesh->texture_coordinates_count = mesh->vertices_count * 2 / 3;
 		mesh->texture_coordinates = (float*)
 			calloc(mesh->texture_coordinates_count,
 				   sizeof(float));

@@ -1,6 +1,8 @@
 #include "model.h"
 #include "mesh.h"
 
+#include <stdio.h>
+
 #include <GL/glew.h>
 
 void load_model(Model * model){
@@ -16,7 +18,7 @@ void load_model(Model * model){
 	//bind vbo and assign vertex and texture data
 	glBindBuffer(GL_ARRAY_BUFFER, model->vbo);
 
-	size_t vertices_and_tex_coords_count = model->mesh->vertices_count * 3 + model->mesh->texture_coordinates_count * 2;
+	size_t vertices_and_tex_coords_count = model->mesh->vertices_count + model->mesh->texture_coordinates_count;
 	
 	model->vertices_and_tex_coords = (float*) malloc(vertices_and_tex_coords_count * sizeof(float));
 
@@ -30,12 +32,12 @@ void load_model(Model * model){
 		model->vertices_and_tex_coords[i+4] = model->mesh->texture_coordinates[i - 3*(i/5) + 1];
 	}
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(model->vertices_and_tex_coords), model->vertices_and_tex_coords, GL_STATIC_DRAW);
-
+	glBufferData(GL_ARRAY_BUFFER, vertices_and_tex_coords_count * sizeof(float), model->vertices_and_tex_coords, GL_STATIC_DRAW);
+	
 	//bind ebo and assign index data
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->ebo);
 
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(model->mesh->indices), model->mesh->indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, model->mesh->indices_count * sizeof(int), model->mesh->indices, GL_STATIC_DRAW);
 
 	//vertex positions
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)0);
@@ -55,7 +57,7 @@ void bind_model(Model * model){
 }
 
 void render_model(Model * model){
-
+	bind_model(model);
 	glDrawElements(GL_TRIANGLES, model->mesh->indices_count, GL_UNSIGNED_INT, 0);
 }
 
