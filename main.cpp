@@ -293,21 +293,21 @@ int main()
 			}
 		}
 
-		const Uint8 *  keystates = SDL_GetKeyboardState(NULL);
+		const Uint8 * keystates = SDL_GetKeyboardState(NULL);
 		
-		if(keystates[SDL_SCANCODE_W]){
+		if (keystates[SDL_SCANCODE_W]) {
 			camera.move_in_direction(DIR_FORWARD);
 		}
-		if(keystates[SDL_SCANCODE_A]){
+		if (keystates[SDL_SCANCODE_A]) {
 			camera.move_in_direction(DIR_LEFT);
 		}
-		if(keystates[SDL_SCANCODE_S]){
+		if (keystates[SDL_SCANCODE_S]) {
 			camera.move_in_direction(DIR_BACK);
 		}
-		if(keystates[SDL_SCANCODE_D]){
+		if (keystates[SDL_SCANCODE_D]) {
 			camera.move_in_direction(DIR_RIGHT);
 		}
-		if(keystates[SDL_SCANCODE_ESCAPE]){
+		if (keystates[SDL_SCANCODE_ESCAPE]) {
 			running = false;
 		}
 

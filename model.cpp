@@ -53,7 +53,6 @@ void load_model(Model * model){
 }
 
 void bind_model(Model * model){
-
 	glBindVertexArray(model->vao);
 }
 
@@ -63,7 +62,6 @@ void render_model(Model * model){
 }
 
 void cleanup_model(Model * model){
-
 	free(model->vertices_and_tex_coords);
 
 	glBindVertexArray(model->vao);
