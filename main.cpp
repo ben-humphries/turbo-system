@@ -13,9 +13,11 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#include "common.h"
 #include "list.h"
 #include "ply-parser.h"
 #include "model.h"
+#include "shader.h"
 
 enum Direction {
 	DIR_FORWARD,
@@ -24,43 +26,6 @@ enum Direction {
 	DIR_RIGHT,
 	DIR_COUNT,
 };
-
-char * load_string_from_file(const char * path)
-{
-	FILE * file = fopen(path, "r");
-	if (file == NULL) return NULL;
-	int file_len = 0;
-	while (fgetc(file) != EOF) file_len++;
-	char * str = (char*) malloc(file_len + 1);
-	str[file_len] = '\0';
-	fseek(file, 0, SEEK_SET);
-	for (int i = 0; i < file_len; i++) str[i] = fgetc(file);
-	fclose(file);
-	return str;
-}
-
-void check_shader_compilation(GLuint shader) {
-	int success;
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-
-	if (!success) {
-		char infoLog[512];
-		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		printf("ERROR: Shader Compilation failed...\n", infoLog);
-		exit(1);
-	}
-}
-
-GLuint compile_shader(const char * path, GLenum type)
-{
-	const char * source = load_string_from_file(path);
-	GLuint shader = glCreateShader(type);
-	glShaderSource(shader, 1, &source, NULL);
-	glCompileShader(shader);
-	check_shader_compilation(shader);
-	free((void*) source);
-	return shader;
-}
 
 struct SDL_State {
 	int width;
@@ -246,19 +211,8 @@ int main()
 
 	Camera camera;
 	camera.init(glm::vec3(0, 0, -3), 90, -20);
-	
-	// Load shaders
-	GLuint program = glCreateProgram();
-	{
-		GLuint vertex = compile_shader("vertex.glsl", GL_VERTEX_SHADER);
-		GLuint fragment = compile_shader("fragment.glsl", GL_FRAGMENT_SHADER);
-		glAttachShader(program, vertex);
-		glAttachShader(program, fragment);
-		glLinkProgram(program);
-		glDeleteShader(vertex);
-		glDeleteShader(fragment);
-	}
-	glUseProgram(program);
+
+	Shader shader = Shader::load_from_source("vertex.glsl", "fragment.glsl");
 
 	//Load texture
 	int w, h, c;
@@ -322,10 +276,9 @@ int main()
 		y -= sdl_state.height / 2;
 		SDL_WarpMouseInWindow(sdl_state.window, sdl_state.width / 2, sdl_state.height / 2);
 		camera.rotate(x, -y);
-		
-		// Set uniform
-		glUniformMatrix4fv(glGetUniformLocation(program, "transform"),
-						   1, GL_FALSE, glm::value_ptr(projection_matrix * camera.get_view_matrix()));
+
+		shader.use_program();
+		shader.set_mat4_uniform("transform", projection_matrix * camera.get_view_matrix());
 
 		glClearColor(0.0,0.0,0.0,1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
