@@ -1,5 +1,5 @@
 #include "camera.h"
-#include "sdl_state.h"
+#include "sdl-state.h"
 
 glm::mat4 Camera::get_view_matrix()
 {

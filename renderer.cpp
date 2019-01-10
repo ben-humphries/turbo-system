@@ -2,7 +2,7 @@
 
 #include "renderer.h"
 #include "camera.h"
-#include "sdl_state.h"
+#include "sdl-state.h"
 
 #include <assert.h>
 #include <stdio.h>

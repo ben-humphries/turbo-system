@@ -1,4 +1,4 @@
-#include "sdl_state.h"
+#include "sdl-state.h"
 
 SDL_State SDL_State::state;
 

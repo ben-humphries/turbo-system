@@ -11,7 +11,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "common.h"
-#include "sdl_state.h"
+#include "sdl-state.h"
 #include "list.h"
 #include "ply-parser.h"
 #include "renderer.h"
