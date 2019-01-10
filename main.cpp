@@ -197,30 +197,77 @@ void Camera::rotate(float dx, float dy, bool constrain_pitch)
 	update_vectors();
 }
 
-int main()
+struct Entity {
+	Model * model;
+	Texture texture;
+	Shader  shader;
+	static Entity create(const char * model_path,
+						 const char * texture_path,
+						 Shader shader);
+};
+
+Entity Entity::create(const char * model_path,
+					  const char * texture_path,
+					  Shader shader)
 {
+	Entity entity;
+	
+	entity.model = (Model *) malloc(sizeof(Model));
+	entity.model->mesh = PLY::load_mesh_from_ply_file(model_path);
+	load_model(entity.model);
+
+	entity.texture = Texture::load_from_file(texture_path);
+
+	entity.shader = shader;
+
+	return entity;
+}
+
+static List<Entity> entities;
+
+namespace Renderer {
+	glm::mat4 projection_matrix(1);
+
+	void initialize_renderer()
+	{
+		projection_matrix = glm::perspective(glm::radians(45.0f),
+											 (float) sdl_state.width / sdl_state.height,
+											 0.1f, 300.0f);
+	}
+	
+	void render(Model * model, Texture texture, Shader shader, Camera * camera)
+	{
+		texture.use_texture();
+		
+		shader.use_program();
+		shader.set_mat4_uniform("transform", projection_matrix * camera->get_view_matrix());
+		
+		render_model(model);
+	}
+}
+
+int main()
+{	
 	// Tests
 	test_lists();
+
+	entities.alloc();
 	
 	sdl_state.init(800, 600);
-	
-	glm::mat4 projection_matrix(1);
-	projection_matrix = glm::perspective(glm::radians(45.0f), (float) sdl_state.width / sdl_state.height, 0.1f, 300.0f);
+
+	Renderer::initialize_renderer();
 
 	Camera camera;
 	camera.init(glm::vec3(0, 0, -3), 90, -20);
 
-	Shader shader = Shader::load_from_source("vertex.glsl", "fragment.glsl");
-	Texture texture = Texture::load_from_file("texture.png");
+	Shader default_shader = Shader::load_from_source("vertex.glsl", "fragment.glsl");
+
+	entities.push(Entity::create("example.ply", "texture.png", default_shader));
 		
 	bool directions[DIR_COUNT] = {0};
 	
 	SDL_Event event;
 	bool running = true;
-
-	Model * model = (Model *) malloc(sizeof(Model));
-	model->mesh = PLY::load_mesh_from_ply_file("example.ply");
-	load_model(model);
 	
 	while (running) {
 		if (SDL_PollEvent(&event)) {
@@ -257,15 +304,13 @@ int main()
 		SDL_WarpMouseInWindow(sdl_state.window, sdl_state.width / 2, sdl_state.height / 2);
 		camera.rotate(x, -y);
 
-		texture.use_texture();
-		
-		shader.use_program();
-		shader.set_mat4_uniform("transform", projection_matrix * camera.get_view_matrix());
-		
 		glClearColor(0.0,0.0,0.0,1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
-		render_model(model);
+
+		for (int i = 0; i < entities.size; i++) {
+			Entity e = entities[i];
+			Renderer::render(e.model, e.texture, e.shader, &camera);
+		}
 		
 		SDL_GL_SwapWindow(sdl_state.window);
 		
