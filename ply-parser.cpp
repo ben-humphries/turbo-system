@@ -7,8 +7,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-#include <vector>
-
+#include "list.h"
 #include "ply-parser.h"
 
 // TODO(pixlark): Code duplication
@@ -270,7 +269,7 @@ struct Property {
 struct Element {
 	const char * name;
 	size_t count;
-	std::vector<Property> properties;
+	List<Property> properties;
 };
 
 #define current() (parser->token)
@@ -367,11 +366,12 @@ Element parse_element(Parser * parser)
 	advance();
 
 	// Properties
+	element.properties.alloc();
 	while (match(PLY_PROPERTY)) {
 		if (is(PLY_LIST)) {
-			element.properties.push_back(parse_list_property(parser));
+			element.properties.push(parse_list_property(parser));
 		} else {
-			element.properties.push_back(parse_scalar_property(parser));
+			element.properties.push(parse_scalar_property(parser));
 		}
 	}
 	
@@ -385,16 +385,17 @@ Mesh * parse_file(Parser * parser)
 	}
 
 	// Parse header
-	std::vector<Element> elements;
+	List<Element> elements;
+	elements.alloc();
 	while (is(PLY_ELEMENT)) {
-		elements.push_back(parse_element(parser));
+		elements.push(parse_element(parser));
 	}
 	expect(PLY_END_HEADER);
 	
 	// Parse into mesh
 	bool found_uv = false;
 	Mesh * mesh = (Mesh*) malloc(sizeof(Mesh));
-	for (int i = 0; i < elements.size(); i++) {
+	for (int i = 0; i < elements.size; i++) {
 		auto element = elements[i];
 		if (strcmp(element.name, "vertex") == 0) {
 			mesh->vertices_count = element.count * 5;
@@ -438,6 +439,12 @@ Mesh * parse_file(Parser * parser)
 			calloc(mesh->texture_coordinates_count,
 				   sizeof(float));
 	}
+
+	// Cleanup
+	for (int i = 0; i < elements.size; i++) {
+		elements[i].properties.dealloc();
+	}
+	elements.dealloc();
 	
 	return mesh;
 }
