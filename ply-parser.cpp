@@ -364,7 +364,7 @@ Element parse_element(Parser * parser)
 	return element;
 }
 
-Mesh * parse_file(Parser * parser)
+Renderer::Mesh * parse_file(Parser * parser)
 {
 	if (!parse_header(parser)) {
 		fatal("Invalid header in mesh file \"%s\"\n", parser->filename);
@@ -380,7 +380,7 @@ Mesh * parse_file(Parser * parser)
 	
 	// Parse into mesh
 	bool found_uv = false;
-	Mesh * mesh = (Mesh*) malloc(sizeof(Mesh));
+	Renderer::Mesh * mesh = (Renderer::Mesh*) malloc(sizeof(Renderer::Mesh));
 	for (int i = 0; i < elements.size; i++) {
 		auto element = elements[i];
 		if (strcmp(element.name, "vertex") == 0) {
@@ -444,7 +444,7 @@ Mesh * parse_file(Parser * parser)
 
 // :\ Parser
 
-Mesh * PLY::load_mesh_from_ply_file(const char * path)
+Renderer::Mesh * PLY::load_mesh_from_ply_file(const char * path)
 {
 	const char * source = load_string_from_file(path);
 	if (!source) {
@@ -457,12 +457,12 @@ Mesh * PLY::load_mesh_from_ply_file(const char * path)
 	parser.position = 0;
 	advance_lexer(&parser); // Prime the parser
 
-	Mesh * mesh = parse_file(&parser);
+	Renderer::Mesh * mesh = parse_file(&parser);
 	
 	return mesh;
 }
 
-void print_mesh(Mesh * mesh)
+void print_mesh(Renderer::Mesh * mesh)
 {
 	printf("Vertices (%d):\n", mesh->vertices_count);
 	for (int i = 0; i < mesh->vertices_count; i++) {
@@ -480,6 +480,6 @@ void print_mesh(Mesh * mesh)
 
 void PLY::mesh_test()
 {
-	Mesh * mesh = load_mesh_from_ply_file("example.ply");
+	Renderer::Mesh * mesh = load_mesh_from_ply_file("example.ply");
 	print_mesh(mesh);
 }

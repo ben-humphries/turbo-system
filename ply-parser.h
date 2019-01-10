@@ -1,8 +1,8 @@
 #pragma once
 
-#include "mesh.h"
+#include "renderer.h"
 
 namespace PLY {
-	Mesh * load_mesh_from_ply_file(const char * path);
+	Renderer::Mesh * load_mesh_from_ply_file(const char * path);
 	void mesh_test();
 };
