@@ -14,7 +14,7 @@ struct Shader {
 	void set_mat4_uniform(const char * uniform_name, glm::mat4 value);
 	void use_program();
 	
-	Shader static load_from_source(const char * vertex_path,
+	static Shader load_from_source(const char * vertex_path,
 								   const char * fragment_path);
 };
 

@@ -10,14 +10,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 #include "common.h"
 #include "list.h"
 #include "ply-parser.h"
 #include "model.h"
 #include "shader.h"
+#include "texture.h"
 
 enum Direction {
 	DIR_FORWARD,
@@ -213,25 +211,7 @@ int main()
 	camera.init(glm::vec3(0, 0, -3), 90, -20);
 
 	Shader shader = Shader::load_from_source("vertex.glsl", "fragment.glsl");
-
-	//Load texture
-	int w, h, c;
-	unsigned char * pixels = stbi_load("Texture.png", &w, &h, &c, 4);
-
-	unsigned int texture;
-	
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-	
-	glBindTexture(GL_TEXTURE_2D, texture);
+	Texture texture = Texture::load_from_file("texture.png");
 		
 	bool directions[DIR_COUNT] = {0};
 	
@@ -277,9 +257,11 @@ int main()
 		SDL_WarpMouseInWindow(sdl_state.window, sdl_state.width / 2, sdl_state.height / 2);
 		camera.rotate(x, -y);
 
+		texture.use_texture();
+		
 		shader.use_program();
 		shader.set_mat4_uniform("transform", projection_matrix * camera.get_view_matrix());
-
+		
 		glClearColor(0.0,0.0,0.0,1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
