@@ -13,6 +13,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#include "list.h"
 #include "ply-parser.h"
 #include "model.h"
 
@@ -235,6 +236,9 @@ void Camera::rotate(float dx, float dy, bool constrain_pitch)
 
 int main()
 {
+	// Tests
+	test_lists();
+	
 	sdl_state.init(800, 600);
 	
 	glm::mat4 projection_matrix(1);
