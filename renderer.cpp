@@ -13,6 +13,10 @@
 
 namespace Renderer {
 
+	Dictionary Model::models;
+	Dictionary Texture::textures;
+	Dictionary Shader::shaders;
+	
 	/*
 	 * Rendering
 	 */
@@ -24,14 +28,18 @@ namespace Renderer {
 		projection_matrix = glm::perspective(glm::radians(45.0f),
 											 (float) SDL_State::state.width / SDL_State::state.height,
 											 0.1f, 300.0f);
+
+		Model::models.alloc();
+		Texture::textures.alloc();
+		Shader::shaders.alloc();
 	}
 	
-	void render(Model model, Texture texture, Shader shader, Camera * camera)
+	void render(Model * model, Texture * texture, Shader shader, Camera * camera)
 	{
-		texture.use_texture();
+		texture->use_texture();
 		shader.use_program();
 		shader.set_mat4_uniform("transform", projection_matrix * camera->get_view_matrix());
-		model.render();
+		model->render();
 	}
 	
 	/*
@@ -92,7 +100,17 @@ namespace Renderer {
 
 		return shader;
 	}
+	/* TODO(ben-humphries): figure out how to make shaders work with this 
+	Shader * Shader::get_shader(char * name)
+	{
+		Shader * shader = (Shader *) shaders.lookup(name);
+		if(shader) {
+			return shader;
+		}
 
+		Shader s = load_from_source(name + .vert, name+.frag)
+	}
+	*/
 	/*
 	 * Textures
 	 */
@@ -102,17 +120,17 @@ namespace Renderer {
 		glBindTexture(texture_type, texture);
 	}
 
-	Texture Texture::load_from_file(const char * texture_path, GLenum texture_type)
+	Texture * Texture::load_from_file(const char * texture_path, GLenum texture_type)
 	{
 		int w, h, c;
 		unsigned char * pixels = stbi_load(texture_path, &w, &h, &c, 4);
 		assert(pixels);
 
-		Texture texture;
-		texture.texture_type = texture_type;
+		Texture * texture = (Texture *) malloc(sizeof(Texture));
+		texture->texture_type = texture_type;
 	
-		glGenTextures(1, &texture.texture);
-		glBindTexture(texture_type, texture.texture);
+		glGenTextures(1, &texture->texture);
+		glBindTexture(texture_type, texture->texture);
 
 		// set texture wrapping to GL_REPEAT (default wrapping method)
 		glTexParameteri(texture_type, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -126,25 +144,38 @@ namespace Renderer {
 		return texture;
 	}
 
+	Texture * Texture::get_texture(char * name)
+	{
+		Texture * texture = (Texture *) textures.lookup(name);
+
+		if(texture) {
+			return texture;
+		}
+
+		Texture * t = load_from_file(name);
+		textures.add(name, t);
+		return t;
+	}
+
 	/*
 	 * Models
 	 */
 	
-	Model Model::create(Mesh * mesh)
+	Model * Model::create(Mesh * mesh)
 	{
-		Model model;
-		model.mesh = mesh;
+		Model * model = (Model *) malloc(sizeof(Model));
+		model->mesh = mesh;
 		
 		//initialize buffer and array objects
-		glGenVertexArrays(1, &model.vao);
-		glGenBuffers(1, &model.vbo);
-		glGenBuffers(1, &model.ebo);
+		glGenVertexArrays(1, &model->vao);
+		glGenBuffers(1, &model->vbo);
+		glGenBuffers(1, &model->ebo);
 
 		//bind vao
-		glBindVertexArray(model.vao);
+		glBindVertexArray(model->vao);
 
 		//bind vbo and assign vertex and texture data
-		glBindBuffer(GL_ARRAY_BUFFER, model.vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, model->vbo);
 		/*
 		  size_t vertices_and_tex_coords_count = model.mesh->vertices_count + model.mesh->texture_coordinates_count;
 	
@@ -156,17 +187,17 @@ namespace Renderer {
 		  model.vertices_and_tex_coords[i+1] = model.mesh->vertices[i - 2*(i/5) + 1];
 		  model.vertices_and_tex_coords[i+2] = model.mesh->vertices[i - 2*(i/5) + 2];
 
-		  model.vertices_and_tex_coords[i+3] = model.mesh->texture_coordinates[i - 3*(i/5)];
-		  model.vertices_and_tex_coords[i+4] = model.mesh->texture_coordinates[i - 3*(i/5) + 1];
+		  model->vertices_and_tex_coords[i+3] = model->mesh->texture_coordinates[i - 3*(i/5)];
+		  model->vertices_and_tex_coords[i+4] = model->mesh->texture_coordinates[i - 3*(i/5) + 1];
 		  }
 		*/
-		//glBufferData(GL_ARRAY_BUFFER, vertices_and_tex_coords_count * sizeof(float), model.vertices_and_tex_coords, GL_STATIC_DRAW);
-		glBufferData(GL_ARRAY_BUFFER, model.mesh->vertices_count * sizeof(float), model.mesh->vertices, GL_STATIC_DRAW);
+		//glBufferData(GL_ARRAY_BUFFER, vertices_and_tex_coords_count * sizeof(float), model->vertices_and_tex_coords, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, model->mesh->vertices_count * sizeof(float), model->mesh->vertices, GL_STATIC_DRAW);
 	
 		//bind ebo and assign index data
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.ebo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->ebo);
 
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, model.mesh->indices_count * sizeof(int), model.mesh->indices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, model->mesh->indices_count * sizeof(int), model->mesh->indices, GL_STATIC_DRAW);
 
 		//vertex positions
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)0);

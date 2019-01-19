@@ -18,8 +18,8 @@
 #include "camera.h"
 
 struct Entity {
-	Renderer::Model   model;
-	Renderer::Texture texture;
+	Renderer::Model *  model;
+	Renderer::Texture * texture;
 	Renderer::Shader  shader;
 	static Entity create(const char * model_path,
 						 const char * texture_path,

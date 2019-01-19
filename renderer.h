@@ -6,6 +6,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "dictionary.h"
+
 struct Camera; // "camera.h"
 
 namespace Renderer {
@@ -24,17 +26,23 @@ namespace Renderer {
 		unsigned int vbo;
 		unsigned int ebo;
 		//float * vertices_and_tex_coords;
-		static Model create(Mesh * mesh);
+		static Model * create(Mesh * mesh);
 		void bind();
 		void render();
 		void cleanup();
+
+		static Dictionary models;
+		static Model * get_model(char * name);
 	};
 	
 	struct Texture {
 		GLuint texture;
 		GLenum texture_type;
 		void use_texture();
-		static Texture load_from_file(const char * texture_path, GLenum texture_type = GL_TEXTURE_2D);
+		static Texture * load_from_file(const char * texture_path, GLenum texture_type = GL_TEXTURE_2D);
+
+		static Dictionary textures;
+		static Texture * get_texture(char * name);
 	};
 	
 	struct Shader {
@@ -47,8 +55,11 @@ namespace Renderer {
 	
 		static Shader load_from_source(const char * vertex_path,
 									   const char * fragment_path);
+
+		static Dictionary shaders;
+		static Shader * get_shader(char * name);
 	};
 
 	void initialize_renderer();
-	void render(Model model, Texture texture, Shader shader, Camera * camera);
+	void render(Model * model, Texture * texture, Shader shader, Camera * camera);
 }
