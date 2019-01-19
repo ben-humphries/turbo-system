@@ -23,7 +23,7 @@ namespace Renderer {
 		unsigned int vao;
 		unsigned int vbo;
 		unsigned int ebo;
-		float * vertices_and_tex_coords;
+		//float * vertices_and_tex_coords;
 		static Model create(Mesh * mesh);
 		void bind();
 		void render();

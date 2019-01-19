@@ -195,7 +195,7 @@ namespace Renderer {
 
 	void Model::cleanup()
 	{
-		free(vertices_and_tex_coords);
+		//free(vertices_and_tex_coords);
 
 		glBindVertexArray(vao);
 		glDeleteBuffers(1, &vbo);
