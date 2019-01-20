@@ -7,13 +7,13 @@ void Dictionary::alloc()
 	resources.alloc();
 }
 
-void Dictionary::add(char * name, void * resource)
+void Dictionary::add(const char * name, void * resource)
 {
 	names.push(name);
 	resources.push(resource);
 }
 
-void * Dictionary::lookup(char * name)
+void * Dictionary::lookup(const char * name)
 {
 	for (int i = 0; i < names.size; i++) {
 		if (strcmp(names[i], name) == 0) {

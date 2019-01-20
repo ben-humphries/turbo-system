@@ -32,7 +32,7 @@ namespace Renderer {
 		void cleanup();
 
 		static Dictionary models;
-		static Model * get_model(char * name);
+		static Model * get_model(const char * name);
 	};
 	
 	struct Texture {
@@ -42,7 +42,7 @@ namespace Renderer {
 		static Texture * load_from_file(const char * texture_path, GLenum texture_type = GL_TEXTURE_2D);
 
 		static Dictionary textures;
-		static Texture * get_texture(char * name);
+		static Texture * get_texture(const char * name);
 	};
 	
 	struct Shader {
@@ -57,7 +57,6 @@ namespace Renderer {
 									   const char * fragment_path);
 
 		static Dictionary shaders;
-		static Shader * get_shader(char * name);
 	};
 
 	void initialize_renderer();

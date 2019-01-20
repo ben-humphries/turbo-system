@@ -3,11 +3,11 @@
 
 struct Dictionary {
 
-	List<char *> names;
+	List<const char *> names;
 	List<void *> resources;
 
 	void alloc();
 	
-	void add(char * name, void * resource);
-	void * lookup(char * name);
+	void add(const char * name, void * resource);
+	void * lookup(const char * name);
 };

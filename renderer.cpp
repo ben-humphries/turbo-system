@@ -3,6 +3,7 @@
 #include "renderer.h"
 #include "camera.h"
 #include "sdl-state.h"
+#include "ply-parser.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -144,7 +145,7 @@ namespace Renderer {
 		return texture;
 	}
 
-	Texture * Texture::get_texture(char * name)
+	Texture * Texture::get_texture(const char * name)
 	{
 		Texture * texture = (Texture *) textures.lookup(name);
 
@@ -232,5 +233,19 @@ namespace Renderer {
 		glDeleteBuffers(1, &vbo);
 		glDeleteBuffers(1, &ebo);
 		glDeleteVertexArrays(1, &vao);
-	}	
+	}
+
+	Model * Model::get_model(const char * name)
+	{
+		Model * model = (Model *) models.lookup(name);
+
+		if (model) {
+			return model;
+		}
+
+		Model * m = create(PLY::load_mesh_from_ply_file(name));
+		models.add(name, m);
+		return m;
+	}
+	
 }

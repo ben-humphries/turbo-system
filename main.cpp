@@ -31,9 +31,9 @@ Entity Entity::create(const char * model_path,
 					  Renderer::Shader shader)
 {
 	Entity entity;
-
-	entity.model = Renderer::Model::create(PLY::load_mesh_from_ply_file(model_path));
-	entity.texture = Renderer::Texture::load_from_file(texture_path);
+	
+	entity.model = Renderer::Model::get_model(model_path);
+	entity.texture = Renderer::Texture::get_texture(texture_path);
 	entity.shader = shader;
 
 	return entity;
