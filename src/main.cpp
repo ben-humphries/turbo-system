@@ -14,43 +14,7 @@
 #include "ply-parser.h"
 #include "renderer.h"
 #include "camera.h"
-
-struct Transform {
-	glm::mat4 model_matrix;
-	
-	void init()
-	{
-		model_matrix = glm::mat4(1);
-	}
-	void move(glm::vec3 movement)
-	{
-		model_matrix = glm::translate(model_matrix, movement);
-	}
-};
-
-struct Entity {
-	Transform transform;
-	Renderer::Shader * shader;
-
-	Entity * parent;
-	List<Entity*> children;
-	
-	void base_initialize()
-	{
-		shader = Renderer::Shader::get_shader("default", "res/vertex.glsl", "res/fragment.glsl");
-		parent = NULL;
-		children.alloc();
-	}
-	void add_child(Entity * entity)
-	{
-		children.push(entity);
-		entity->base_initialize();
-		entity->initialize();
-	}
-	virtual void initialize() {}
-	virtual void update() {}
-	virtual void render(Camera * camera) {}
-};
+#include "entity.h"
 
 struct Monkey : Entity {
 	Renderer::Model * model;
@@ -65,22 +29,6 @@ struct Monkey : Entity {
 		Renderer::render(model, texture, shader, camera, transform.model_matrix);
 	}
 };
-
-void update_entity_tree(Entity * root)
-{
-	root->update();
-	for (int i = 0; i < root->children.size; i++) {
-		update_entity_tree(root->children[i]);
-	}
-}
-
-void render_entity_tree(Entity * root, Camera * camera)
-{
-	root->render(camera);
-	for (int i = 0; i < root->children.size; i++) {
-		render_entity_tree(root->children[i], camera);
-	}
-}
 
 int main()
 {
