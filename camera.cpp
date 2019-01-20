@@ -1,6 +1,9 @@
 #include "camera.h"
 #include "sdl-state.h"
 
+#include <glm/trigonometric.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 glm::mat4 Camera::get_view_matrix()
 {
 	return glm::lookAt(position, position + forward, up);
