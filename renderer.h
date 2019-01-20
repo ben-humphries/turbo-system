@@ -60,5 +60,5 @@ namespace Renderer {
 	};
 
 	void initialize_renderer();
-	void render(Model * model, Texture * texture, Shader shader, Camera * camera);
+	void render(Model * model, Texture * texture, Shader shader, Camera * camera, glm::mat4 model_matrix);
 }
