@@ -15,58 +15,96 @@
 #include "renderer.h"
 #include "camera.h"
 
-struct Entity {
-	Renderer::Model *  model;
-	Renderer::Texture * texture;
-	Renderer::Shader  shader;
-
+struct Transform {
 	glm::mat4 model_matrix;
 	
-	static Entity create(const char * model_path,
-						 const char * texture_path,
-						 Renderer::Shader shader);
+	void init()
+	{
+		model_matrix = glm::mat4(1);
+	}
+	void move(glm::vec3 movement)
+	{
+		model_matrix = glm::translate(model_matrix, movement);
+	}
 };
 
-Entity Entity::create(const char * model_path,
-					  const char * texture_path,
-					  Renderer::Shader shader)
-{
-	Entity entity;
+struct Entity {
+	Transform transform;
+	Renderer::Shader shader;
+
+	Entity * parent;
+	List<Entity*> children;
 	
-	entity.model = Renderer::Model::get_model(model_path);
-	entity.texture = Renderer::Texture::get_texture(texture_path);
-	entity.shader = shader;
+	void base_initialize()
+	{
+		shader = Renderer::Shader::load_from_source("vertex.glsl", "fragment.glsl");
+		parent = NULL;
+		children.alloc();
+	}
+	void add_child(Entity * entity)
+	{
+		children.push(entity);
+		entity->base_initialize();
+		entity->initialize();
+	}
+	virtual void initialize() {}
+	virtual void update() {}
+	virtual void render(Camera * camera) {}
+};
 
-	entity.model_matrix = glm::mat4(1);
+struct Monkey : Entity {
+	Renderer::Model * model;
+	Renderer::Texture * texture;
+	virtual void initialize()
+	{
+		model = Renderer::Model::get_model("example.ply");
+		texture = Renderer::Texture::get_texture("texture.png");
+	}
+	virtual void render(Camera * camera)
+	{
+		Renderer::render(model, texture, shader, camera, transform.model_matrix);
+	}
+};
 
-	return entity;
+void update_entity_tree(Entity * root)
+{
+	root->update();
+	for (int i = 0; i < root->children.size; i++) {
+		update_entity_tree(root->children[i]);
+	}
 }
 
-static List<Entity> entities;
+void render_entity_tree(Entity * root, Camera * camera)
+{
+	root->render(camera);
+	for (int i = 0; i < root->children.size; i++) {
+		render_entity_tree(root->children[i], camera);
+	}
+}
 
 int main()
-{	
-	// Tests
-	test_lists();
-
-	entities.alloc();
-	
+{
 	SDL_State::state.init(800, 600);
-
 	Renderer::initialize_renderer();
 
 	Camera camera;
 	camera.init(glm::vec3(0, 0, -3), 90, -20);
-
-	Renderer::Shader default_shader = Renderer::Shader::load_from_source("vertex.glsl", "fragment.glsl");
-
-	entities.push(Entity::create("example.ply", "texture.png", default_shader));
-	Entity e = Entity::create("example.ply", "texture.png", default_shader);
-	e.model_matrix = glm::translate(e.model_matrix, glm::vec3(0,1.5,0));
-	entities.push(e);
-
 	
-	bool directions[DIR_COUNT] = {0};
+	Entity * root = new Entity();
+	root->base_initialize();
+
+	for (int i = 0; i < 17; i++) {
+		Monkey * monkey = new Monkey();
+		root->add_child(monkey);
+	}
+	root->children[0]->add_child(new Monkey());
+
+	for (int i = 0; i < root->children.size; i++) {
+		root->children[i]->transform.move(glm::vec3(0, i, 0));
+	}
+	root->children[0]->children[0]->transform.move(glm::vec3(3, 0, 0));
+
+	bool directions[DIR_COUNT] = { false, false, false, false };
 	
 	SDL_Event event;
 	bool running = true;
@@ -106,13 +144,14 @@ int main()
 		SDL_WarpMouseInWindow(SDL_State::state.window, SDL_State::state.width / 2, SDL_State::state.height / 2);
 		camera.rotate(x, -y);
 
+		// Update
+		update_entity_tree(root);
+
+		// Render
 		glClearColor(0.0,0.0,0.0,1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		for (int i = 0; i < entities.size; i++) {
-			Entity e = entities[i];
-			Renderer::render(e.model, e.texture, e.shader, &camera, e.model_matrix);
-		}
+		render_entity_tree(root, &camera);
 		
 		SDL_GL_SwapWindow(SDL_State::state.window);
 		
@@ -124,7 +163,4 @@ int main()
 			//printf("%f                  \r", 1.0 / SDL_State::state.delta_time);
 		}
 	}
-	
-	SDL_GL_DeleteContext(SDL_State::state.gl_context);
-	return 0;
 }
