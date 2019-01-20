@@ -30,14 +30,14 @@ struct Transform {
 
 struct Entity {
 	Transform transform;
-	Renderer::Shader shader;
+	Renderer::Shader * shader;
 
 	Entity * parent;
 	List<Entity*> children;
 	
 	void base_initialize()
 	{
-		shader = Renderer::Shader::load_from_source("vertex.glsl", "fragment.glsl");
+		shader = Renderer::Shader::get_shader("default", "vertex.glsl", "fragment.glsl");
 		parent = NULL;
 		children.alloc();
 	}
@@ -84,12 +84,14 @@ void render_entity_tree(Entity * root, Camera * camera)
 
 int main()
 {
+	// Program initialization
 	SDL_State::state.init(800, 600);
 	Renderer::initialize_renderer();
 
 	Camera camera;
 	camera.init(glm::vec3(0, 0, -3), 90, -20);
-	
+
+	// Initialize entity tree
 	Entity * root = new Entity();
 	root->base_initialize();
 
@@ -104,8 +106,7 @@ int main()
 	}
 	root->children[0]->children[0]->transform.move(glm::vec3(3, 0, 0));
 
-	bool directions[DIR_COUNT] = { false, false, false, false };
-	
+	// Main loop
 	SDL_Event event;
 	bool running = true;
 	
@@ -118,6 +119,7 @@ int main()
 			}
 		}
 
+		// Camera movement
 		const Uint8 * keystates = SDL_GetKeyboardState(NULL);
 		
 		if (keystates[SDL_SCANCODE_W]) {
@@ -143,10 +145,10 @@ int main()
 		y -= SDL_State::state.height / 2;
 		SDL_WarpMouseInWindow(SDL_State::state.window, SDL_State::state.width / 2, SDL_State::state.height / 2);
 		camera.rotate(x, -y);
-
+		
 		// Update
 		update_entity_tree(root);
-
+		
 		// Render
 		glClearColor(0.0,0.0,0.0,1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

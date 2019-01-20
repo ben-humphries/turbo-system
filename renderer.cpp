@@ -35,11 +35,11 @@ namespace Renderer {
 		Shader::shaders.alloc();
 	}
 	
-	void render(Model * model, Texture * texture, Shader shader, Camera * camera, glm::mat4 model_matrix)
+	void render(Model * model, Texture * texture, Shader * shader, Camera * camera, glm::mat4 model_matrix)
 	{
 		texture->use_texture();
-		shader.use_program();
-		shader.set_mat4_uniform("transform", projection_matrix * camera->get_view_matrix() * model_matrix);
+		shader->use_program();
+		shader->set_mat4_uniform("transform", projection_matrix * camera->get_view_matrix() * model_matrix);
 		model->render();
 	}
 	
@@ -47,7 +47,8 @@ namespace Renderer {
 	 * Shaders
 	 */
 	
-	static void check_shader_compilation(GLuint shader) {
+	void check_shader_compilation(GLuint shader)
+	{
 		int success;
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
@@ -59,7 +60,7 @@ namespace Renderer {
 		}
 	}
 
-	static GLuint compile_shader(const char * path, GLenum type)
+	GLuint compile_shader(const char * path, GLenum type)
 	{
 		const char * source = load_string_from_file(path);
 		GLuint shader = glCreateShader(type);
@@ -81,37 +82,40 @@ namespace Renderer {
 		glUseProgram(program);
 	}
 
-	Shader Shader::load_from_source(const char * vertex_path,
+	Shader * Shader::load_from_source(const char * vertex_path,
 									const char * fragment_path)
 	{
-		Shader shader;
-		shader.vertex_path = vertex_path;
-		shader.fragment_path = fragment_path;
+		Shader * shader = (Shader *) malloc(sizeof(Shader));
+		shader->vertex_path = vertex_path;
+		shader->fragment_path = fragment_path;
 
-		shader.program = glCreateProgram();
+		shader->program = glCreateProgram();
 	
 		GLuint vertex = compile_shader(vertex_path, GL_VERTEX_SHADER);
 		GLuint fragment = compile_shader(fragment_path, GL_FRAGMENT_SHADER);
 
-		glAttachShader(shader.program, vertex);
-		glAttachShader(shader.program, fragment);
-		glLinkProgram(shader.program);
+		glAttachShader(shader->program, vertex);
+		glAttachShader(shader->program, fragment);
+		glLinkProgram(shader->program);
 		glDeleteShader(vertex);
 		glDeleteShader(fragment);
 
 		return shader;
 	}
-	/* TODO(ben-humphries): figure out how to make shaders work with this 
-	Shader * Shader::get_shader(char * name)
+
+	Shader * Shader::get_shader(const char * name,
+								const char * vertex_path,
+								const char * fragment_path)
 	{
 		Shader * shader = (Shader *) shaders.lookup(name);
-		if(shader) {
+		if (shader) {
 			return shader;
 		}
-
-		Shader s = load_from_source(name + .vert, name+.frag)
+		Shader * s = Shader::load_from_source(vertex_path, fragment_path);
+		shaders.add(name, s);
+		return s;
 	}
-	*/
+	
 	/*
 	 * Textures
 	 */

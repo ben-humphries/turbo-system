@@ -53,12 +53,15 @@ namespace Renderer {
 		void set_mat4_uniform(const char * uniform_name, glm::mat4 value);
 		void use_program();
 	
-		static Shader load_from_source(const char * vertex_path,
-									   const char * fragment_path);
+		static Shader * load_from_source(const char * vertex_path,
+										 const char * fragment_path);
 
 		static Dictionary shaders;
+		static Shader * get_shader(const char * name,
+								   const char * vertex_path,
+								   const char * fragment_path);
 	};
 
 	void initialize_renderer();
-	void render(Model * model, Texture * texture, Shader shader, Camera * camera, glm::mat4 model_matrix);
+	void render(Model * model, Texture * texture, Shader * shader, Camera * camera, glm::mat4 model_matrix);
 }
