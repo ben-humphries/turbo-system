@@ -37,7 +37,7 @@ struct Entity {
 	
 	void base_initialize()
 	{
-		shader = Renderer::Shader::get_shader("default", "vertex.glsl", "fragment.glsl");
+		shader = Renderer::Shader::get_shader("default", "res/vertex.glsl", "res/fragment.glsl");
 		parent = NULL;
 		children.alloc();
 	}
@@ -57,8 +57,8 @@ struct Monkey : Entity {
 	Renderer::Texture * texture;
 	virtual void initialize()
 	{
-		model = Renderer::Model::get_model("example.ply");
-		texture = Renderer::Texture::get_texture("texture.png");
+		model = Renderer::Model::get_model("res/monkey.ply");
+		texture = Renderer::Texture::get_texture("res/texture.png");
 	}
 	virtual void render(Camera * camera)
 	{

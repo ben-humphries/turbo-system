@@ -1,2 +1,4 @@
 make:
-	g++ -g *.cpp -o 3d-platformer -lSDL2 -lGL -lGLEW
+	g++ -g src/* -Iinclude/ \
+		-o bin/turbo-system \
+		-lSDL2 -lGL -lGLEW

@@ -1,2 +1,2 @@
-3d-platformer
-stb_image.h
+bin/*
+include/stb_image.h
