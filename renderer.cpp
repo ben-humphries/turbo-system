@@ -35,11 +35,11 @@ namespace Renderer {
 		Shader::shaders.alloc();
 	}
 	
-	void render(Model * model, Texture * texture, Shader shader, Camera * camera)
+	void render(Model * model, Texture * texture, Shader shader, Camera * camera, glm::mat4 model_matrix)
 	{
 		texture->use_texture();
 		shader.use_program();
-		shader.set_mat4_uniform("transform", projection_matrix * camera->get_view_matrix());
+		shader.set_mat4_uniform("transform", projection_matrix * camera->get_view_matrix() * model_matrix);
 		model->render();
 	}
 	

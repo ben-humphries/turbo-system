@@ -21,6 +21,9 @@ struct Entity {
 	Renderer::Model *  model;
 	Renderer::Texture * texture;
 	Renderer::Shader  shader;
+
+	glm::mat4 model_matrix;
+	
 	static Entity create(const char * model_path,
 						 const char * texture_path,
 						 Renderer::Shader shader);
@@ -35,6 +38,8 @@ Entity Entity::create(const char * model_path,
 	entity.model = Renderer::Model::get_model(model_path);
 	entity.texture = Renderer::Texture::get_texture(texture_path);
 	entity.shader = shader;
+
+	entity.model_matrix = glm::mat4(1);
 
 	return entity;
 }
@@ -58,7 +63,11 @@ int main()
 	Renderer::Shader default_shader = Renderer::Shader::load_from_source("vertex.glsl", "fragment.glsl");
 
 	entities.push(Entity::create("example.ply", "texture.png", default_shader));
-		
+	Entity e = Entity::create("example.ply", "texture.png", default_shader);
+	e.model_matrix = glm::translate(e.model_matrix, glm::vec3(0,1.5,0));
+	entities.push(e);
+
+	
 	bool directions[DIR_COUNT] = {0};
 	
 	SDL_Event event;
@@ -104,7 +113,7 @@ int main()
 
 		for (int i = 0; i < entities.size; i++) {
 			Entity e = entities[i];
-			Renderer::render(e.model, e.texture, e.shader, &camera);
+			Renderer::render(e.model, e.texture, e.shader, &camera, e.model_matrix);
 		}
 		
 		SDL_GL_SwapWindow(SDL_State::state.window);
