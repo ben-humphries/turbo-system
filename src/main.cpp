@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include <math.h>
 
+#undef	IMGUI_IMPL_OPENGL_LOADER_GL3W
+#undef	IMGUI_IMPL_OPENGL_LOADER_GLAD
+#define IMGUI_IMPL_OPENGL_LOADER_GLEW
+#include "imgui.h"
+#include "imgui_impl_sdl.h"
+#include "imgui_impl_opengl3.h"
+
 #include <SDL2/SDL.h>
 
 #define GLEW_STATIC
@@ -35,10 +42,20 @@ int main()
 	// Program initialization
 	SDL_State::state.init(800, 600);
 	Renderer::initialize_renderer();
-
+	
 	Camera camera;
 	camera.init(glm::vec3(0, 0, -3), 90, -20);
 
+	// Dear ImGui
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	//(void) io; // what the fuck is this for?
+	io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+	ImGui::StyleColorsDark();
+	ImGui_ImplSDL2_InitForOpenGL(SDL_State::state.window, SDL_State::state.gl_context);
+	ImGui_ImplOpenGL3_Init("#version 330");
+	
 	// Initialize entity tree
 	Entity * root = new Entity();
 	root->base_initialize();
@@ -57,12 +74,22 @@ int main()
 	// Main loop
 	SDL_Event event;
 	bool running = true;
+	bool debug_mode = false;
 	
 	while (running) {
-		if (SDL_PollEvent(&event)) {
+		while (SDL_PollEvent(&event)) {
+			if (debug_mode) {
+				ImGui_ImplSDL2_ProcessEvent(&event);
+			}
 			switch (event.type) {
 			case SDL_QUIT:
 				running = false;
+				break;
+			case SDL_KEYDOWN:
+				if (event.key.keysym.scancode == SDL_SCANCODE_F3) {
+					debug_mode = !debug_mode;
+					SDL_ShowCursor(debug_mode);
+				}
 				break;
 			}
 		}
@@ -87,12 +114,14 @@ int main()
 		}
 
 		// Rotate camera based on mouse movement
-		int x, y;
-		SDL_GetMouseState(&x, &y);
-		x -= SDL_State::state.width / 2;
-		y -= SDL_State::state.height / 2;
-		SDL_WarpMouseInWindow(SDL_State::state.window, SDL_State::state.width / 2, SDL_State::state.height / 2);
-		camera.rotate(x, -y);
+		if (!debug_mode) {
+			int x, y;
+			SDL_GetMouseState(&x, &y);
+			x -= SDL_State::state.width / 2;
+			y -= SDL_State::state.height / 2;
+			SDL_WarpMouseInWindow(SDL_State::state.window, SDL_State::state.width / 2, SDL_State::state.height / 2);
+			camera.rotate(x, -y);
+		}
 		
 		// Update
 		update_entity_tree(root);
@@ -102,7 +131,24 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		render_entity_tree(root, &camera);
+
+		// ImGui
+		if (debug_mode) {
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplSDL2_NewFrame(SDL_State::state.window);
+			ImGui::NewFrame();
+
+			{
+				ImGui::Begin("test!");
+				ImGui::Text("DAE Galaxybrain????");
+				ImGui::End();
+			}
 		
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		}
+
+		// Finish render
 		SDL_GL_SwapWindow(SDL_State::state.window);
 		
 		// delta time
