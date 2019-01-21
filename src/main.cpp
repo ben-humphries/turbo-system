@@ -116,7 +116,7 @@ int main()
 		update_entity_tree(root);
 		
 		// Render
-		glClearColor(0.0,0.0,0.0,1.0);
+		glClearColor(0.7,0.8,0.9,1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		render_entity_tree(root, &camera);
