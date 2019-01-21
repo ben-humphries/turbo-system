@@ -5,13 +5,6 @@
 
 #include <math.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/string_cast.hpp>
-
-#define GLM_ENABLE_EXPERIMENTAL
-
 #include <iostream>
 
 
@@ -132,6 +125,11 @@ namespace Math {
 	float radians(float degrees)
 	{
 		return degrees * 0.0174533f;
+	}
+
+	float mod(float f, float m)
+	{
+		return fmodf(f, m);
 	}
 	float dot(const vec3 & a, const vec3 & b)
 	{
@@ -268,7 +266,7 @@ namespace Math {
 		printf("%f %f %f\n\n", v.x, v.y, v.z);
 	}
 
-	void print_glmmat4(glm::mat4 & m)
+	/*void print_glmmat4(glm::mat4 & m)
 	{
 		for(int x = 0; x < 4; x ++){
 			for(int y = 0; y < 4; y ++){
@@ -283,7 +281,8 @@ namespace Math {
 	{
 		printf("%f %f %f\n\n", v.x, v.y, v.z);
 	}
-
+	*/
+	
 	//tested:
 	//set/add
 	//pointer
@@ -299,14 +298,14 @@ namespace Math {
 		mat4 test = mat4();
 		
 		//glm mat4
-		glm::mat4 glmtest = glm::mat4(1);
+		//glm::mat4 glmtest = glm::mat4(1);
 
 		test = get_scale_matrix(vec3(2,1,3));
-		glmtest = glm::scale(glmtest, glm::vec3(2,1,3));
+		//glmtest = glm::scale(glmtest, glm::vec3(2,1,3));
 	
 		
 		print_mat4(test);
-		print_glmmat4(glmtest);
+		//print_glmmat4(glmtest);
 	}
 
 	//tested:
@@ -322,14 +321,14 @@ namespace Math {
 		vec3 test = vec3(1,2,3);
 		vec3 test2 = test;
 
-		glm::vec3 glmtest = glm::vec3(1,2,3);
-		glm::vec3 glmtest2 = glm::vec3(4,1,4);
+		//glm::vec3 glmtest = glm::vec3(1,2,3);
+		//glm::vec3 glmtest2 = glm::vec3(4,1,4);
 
 		test = vec3(1,0,0) - vec3(0,1,0);
-		glmtest = normalize(glmtest);
+		//glmtest = normalize(glmtest);
 		
 		print_vec3(test);
-		print_glmvec3(glmtest);
+		//print_glmvec3(glmtest);
 	}
 		
 } //namespace Math

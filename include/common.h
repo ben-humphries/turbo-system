@@ -1,12 +1,5 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/string_cast.hpp>
-
-#define GLM_ENABLE_EXPERIMENTAL
-
 char * load_string_from_file(const char * path);
 
 namespace Math {
@@ -41,6 +34,7 @@ namespace Math {
 	};
 
 	float radians(float degrees);
+	float mod(float f, float m);
 
 	float dot(const vec3 & a, const vec3 & b);
 	vec3 cross(const vec3 & a, const vec3 & b);
@@ -60,8 +54,9 @@ namespace Math {
 
 	void print_mat4(mat4 & m);
 	void print_vec3(vec3 & v);
-	void print_glmmat4(glm::mat4 & m);
-	void print_glmvec3(glm::vec3 & v);
+	
+	//void print_glmmat4(glm::mat4 & m);
+	//void print_glmvec3(glm::vec3 & v);
 	
 	void test_mat4();
 	void test_vec3();

@@ -1,9 +1,6 @@
 #include "camera.h"
 #include "sdl-state.h"
 
-#include <glm/trigonometric.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
 #include <math.h>
 
 Math::mat4 Camera::get_view_matrix()
@@ -68,7 +65,7 @@ void Camera::move_in_direction(Direction direction)
 void Camera::rotate(float dx, float dy, bool constrain_pitch)
 {
 	float mouse_sensitivity = 0.1;
-	yaw = glm::mod(yaw + dx * mouse_sensitivity, 360.0f); //ensure yaw is between 0-360
+	yaw = Math::mod(yaw + dx * mouse_sensitivity, 360.0f); //ensure yaw is between 0-360
 	pitch += dy * mouse_sensitivity;
 
 

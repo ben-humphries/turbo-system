@@ -13,8 +13,6 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-#include <glm/vec3.hpp>
-
 #include "common.h"
 #include "sdl-state.h"
 #include "list.h"
