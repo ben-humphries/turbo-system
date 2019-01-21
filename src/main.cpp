@@ -26,8 +26,8 @@ struct Monkey : Entity {
 	Renderer::Texture * texture;
 	virtual void initialize()
 	{
-		model = Renderer::Model::get_model("res/monkey.ply");
-		texture = Renderer::Texture::get_texture("res/texture.png");
+		model = Renderer::Model::get_model("res/player.ply");
+		texture = Renderer::Texture::get_texture("res/marble.png");
 	}
 	virtual void render(Camera * camera)
 	{
@@ -58,16 +58,7 @@ int main()
 	Entity * root = new Entity();
 	root->base_initialize();
 
-	for (int i = 0; i < 17; i++) {
-		Monkey * monkey = new Monkey();
-		root->add_child(monkey);
-	}
-	root->children[0]->add_child(new Monkey());
-
-	for (int i = 0; i < root->children.size; i++) {
-		root->children[i]->transform.move(Math::vec3(0, i, 0));
-	}
-	root->children[0]->children[0]->transform.move(Math::vec3(3, 0, 0));
+	root->add_child(new Monkey());
 
 	// Main loop
 	SDL_Event event;

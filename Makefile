@@ -1,7 +1,7 @@
 .PHONY: imgui
 
 make:
-	g++ -g src/* imgui.a -Iinclude/ -Iimgui/ \
+	g++ src/* imgui.a -Iinclude/ -Iimgui/ \
 		-o bin/turbo-system \
 		-lSDL2 -lGL -lGLEW -lm
 

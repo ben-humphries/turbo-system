@@ -1,0 +1,180 @@
+
+Execution times (seconds)
+ phase setup             :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall    1386 kB ( 2%) ggc
+ phase parsing           :   0.63 (93%) usr   0.36 (100%) sys   0.99 (94%) wall   77419 kB (94%) ggc
+ phase lang. deferred    :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     758 kB ( 1%) ggc
+ phase opt and generate  :   0.04 ( 6%) usr   0.00 ( 0%) sys   0.05 ( 5%) wall    2651 kB ( 3%) ggc
+ |name lookup            :   0.11 (16%) usr   0.02 ( 6%) sys   0.08 ( 8%) wall    3937 kB ( 5%) ggc
+ |overload resolution    :   0.03 ( 4%) usr   0.01 ( 3%) sys   0.04 ( 4%) wall    7024 kB ( 9%) ggc
+ callgraph construction  :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     111 kB ( 0%) ggc
+ preprocessing           :   0.12 (18%) usr   0.14 (39%) sys   0.26 (25%) wall    8494 kB (10%) ggc
+ parser (global)         :   0.23 (34%) usr   0.14 (39%) sys   0.38 (36%) wall   42030 kB (51%) ggc
+ parser struct body      :   0.02 ( 3%) usr   0.00 ( 0%) sys   0.07 ( 7%) wall    3441 kB ( 4%) ggc
+ parser enumerator list  :   0.00 ( 0%) usr   0.01 ( 3%) sys   0.01 ( 1%) wall     278 kB ( 0%) ggc
+ parser function body    :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall     127 kB ( 0%) ggc
+ parser inl. func. body  :   0.17 (25%) usr   0.04 (11%) sys   0.20 (19%) wall   10566 kB (13%) ggc
+ parser inl. meth. body  :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall    1328 kB ( 2%) ggc
+ template instantiation  :   0.08 (12%) usr   0.03 ( 8%) sys   0.07 ( 7%) wall   11911 kB (14%) ggc
+ expand                  :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     329 kB ( 0%) ggc
+ integrated RA           :   0.03 ( 4%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall    1204 kB ( 1%) ggc
+ final                   :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall      80 kB ( 0%) ggc
+ initialize rtl          :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall      12 kB ( 0%) ggc
+ rest of compilation     :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     127 kB ( 0%) ggc
+ TOTAL                 :   0.68             0.36             1.05              82226 kB
+
+Execution times (seconds)
+ phase setup             :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 (33%) wall    1386 kB (45%) ggc
+ phase parsing           :   0.00 ( 0%) usr   0.01 (100%) sys   0.01 (33%) wall    1563 kB (51%) ggc
+ phase opt and generate  :   0.01 (100%) usr   0.00 ( 0%) sys   0.01 (33%) wall      95 kB ( 3%) ggc
+ preprocessing           :   0.00 ( 0%) usr   0.01 (100%) sys   0.00 ( 0%) wall     400 kB (13%) ggc
+ parser (global)         :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 (33%) wall    1035 kB (34%) ggc
+ final                   :   0.01 (100%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall       4 kB ( 0%) ggc
+ initialize rtl          :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 (33%) wall      12 kB ( 0%) ggc
+ TOTAL                 :   0.01             0.01             0.03               3055 kB
+
+Execution times (seconds)
+ phase setup             :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall    1386 kB (35%) ggc
+ phase parsing           :   0.01 (33%) usr   0.00 ( 0%) sys   0.02 (50%) wall    1880 kB (47%) ggc
+ phase opt and generate  :   0.02 (67%) usr   0.00 ( 0%) sys   0.02 (50%) wall     682 kB (17%) ggc
+ preprocessing           :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 (25%) wall     445 kB (11%) ggc
+ parser (global)         :   0.01 (33%) usr   0.00 ( 0%) sys   0.01 (25%) wall    1229 kB (31%) ggc
+ dominance computation   :   0.01 (33%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall       0 kB ( 0%) ggc
+ expand                  :   0.01 (33%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall      80 kB ( 2%) ggc
+ initialize rtl          :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 (25%) wall      12 kB ( 0%) ggc
+ rest of compilation     :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 (25%) wall      32 kB ( 1%) ggc
+ TOTAL                 :   0.03             0.00             0.04               4011 kB
+
+Execution times (seconds)
+ phase setup             :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall    1386 kB ( 2%) ggc
+ phase parsing           :   0.59 (95%) usr   0.38 (100%) sys   0.97 (95%) wall   77945 kB (95%) ggc
+ phase lang. deferred    :   0.01 ( 2%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     508 kB ( 1%) ggc
+ phase opt and generate  :   0.02 ( 3%) usr   0.00 ( 0%) sys   0.03 ( 3%) wall    1788 kB ( 2%) ggc
+ |name lookup            :   0.06 (10%) usr   0.03 ( 8%) sys   0.16 (16%) wall    3756 kB ( 5%) ggc
+ |overload resolution    :   0.02 ( 3%) usr   0.02 ( 5%) sys   0.04 ( 4%) wall    6872 kB ( 8%) ggc
+ callgraph construction  :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall      99 kB ( 0%) ggc
+ preprocessing           :   0.10 (16%) usr   0.09 (24%) sys   0.25 (25%) wall    8328 kB (10%) ggc
+ parser (global)         :   0.26 (42%) usr   0.20 (53%) sys   0.42 (41%) wall   43038 kB (53%) ggc
+ parser struct body      :   0.01 ( 2%) usr   0.01 ( 3%) sys   0.03 ( 3%) wall    3403 kB ( 4%) ggc
+ parser function body    :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall      53 kB ( 0%) ggc
+ parser inl. func. body  :   0.16 (26%) usr   0.07 (18%) sys   0.17 (17%) wall   10686 kB (13%) ggc
+ parser inl. meth. body  :   0.01 ( 2%) usr   0.00 ( 0%) sys   0.03 ( 3%) wall    1372 kB ( 2%) ggc
+ template instantiation  :   0.06 (10%) usr   0.01 ( 3%) sys   0.07 ( 7%) wall   11504 kB (14%) ggc
+ integrated RA           :   0.01 ( 2%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     834 kB ( 1%) ggc
+ initialize rtl          :   0.01 ( 2%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall      12 kB ( 0%) ggc
+ rest of compilation     :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall      97 kB ( 0%) ggc
+ TOTAL                 :   0.62             0.38             1.02              81638 kB
+
+Execution times (seconds)
+ phase setup             :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall    1386 kB (36%) ggc
+ phase parsing           :   0.00 ( 0%) usr   0.01 (100%) sys   0.02 (50%) wall    1868 kB (49%) ggc
+ phase opt and generate  :   0.02 (100%) usr   0.00 ( 0%) sys   0.02 (50%) wall     530 kB (14%) ggc
+ callgraph construction  :   0.01 (50%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall      27 kB ( 1%) ggc
+ preprocessing           :   0.00 ( 0%) usr   0.01 (100%) sys   0.01 (25%) wall     446 kB (12%) ggc
+ parser (global)         :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 (25%) wall    1224 kB (32%) ggc
+ initialize rtl          :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 (25%) wall      12 kB ( 0%) ggc
+ rest of compilation     :   0.01 (50%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall      23 kB ( 1%) ggc
+ unaccounted todo        :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 (25%) wall       0 kB ( 0%) ggc
+ TOTAL                 :   0.02             0.01             0.04               3834 kB
+
+Execution times (seconds)
+ phase setup             :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall    1386 kB ( 2%) ggc
+ phase parsing           :   0.64 (96%) usr   0.37 (97%) sys   1.01 (95%) wall   81654 kB (97%) ggc
+ phase lang. deferred    :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     472 kB ( 1%) ggc
+ phase opt and generate  :   0.02 ( 3%) usr   0.01 ( 3%) sys   0.03 ( 3%) wall    1091 kB ( 1%) ggc
+ |name lookup            :   0.10 (15%) usr   0.02 ( 5%) sys   0.13 (12%) wall    4125 kB ( 5%) ggc
+ |overload resolution    :   0.04 ( 6%) usr   0.00 ( 0%) sys   0.05 ( 5%) wall    6741 kB ( 8%) ggc
+ dump files              :   0.00 ( 0%) usr   0.01 ( 3%) sys   0.00 ( 0%) wall       0 kB ( 0%) ggc
+ callgraph construction  :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     137 kB ( 0%) ggc
+ preprocessing           :   0.10 (15%) usr   0.14 (37%) sys   0.19 (18%) wall    8723 kB (10%) ggc
+ parser (global)         :   0.29 (43%) usr   0.16 (42%) sys   0.41 (39%) wall   43201 kB (51%) ggc
+ parser struct body      :   0.02 ( 3%) usr   0.01 ( 3%) sys   0.05 ( 5%) wall    5374 kB ( 6%) ggc
+ parser enumerator list  :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     861 kB ( 1%) ggc
+ parser inl. func. body  :   0.15 (22%) usr   0.04 (11%) sys   0.25 (24%) wall    9727 kB (11%) ggc
+ parser inl. meth. body  :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.02 ( 2%) wall    1462 kB ( 2%) ggc
+ template instantiation  :   0.07 (10%) usr   0.02 ( 5%) sys   0.09 ( 8%) wall   12263 kB (14%) ggc
+ varconst                :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall       0 kB ( 0%) ggc
+ integrated RA           :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     344 kB ( 0%) ggc
+ final                   :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall      36 kB ( 0%) ggc
+ unaccounted todo        :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall       0 kB ( 0%) ggc
+ TOTAL                 :   0.67             0.38             1.06              84614 kB
+
+Execution times (seconds)
+ phase setup             :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall    1386 kB ( 2%) ggc
+ phase parsing           :   0.59 (94%) usr   0.38 (100%) sys   0.97 (94%) wall   76090 kB (95%) ggc
+ phase lang. deferred    :   0.01 ( 2%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     230 kB ( 0%) ggc
+ phase opt and generate  :   0.03 ( 5%) usr   0.00 ( 0%) sys   0.04 ( 4%) wall    2028 kB ( 3%) ggc
+ |name lookup            :   0.06 (10%) usr   0.01 ( 3%) sys   0.12 (12%) wall    3698 kB ( 5%) ggc
+ |overload resolution    :   0.05 ( 8%) usr   0.00 ( 0%) sys   0.06 ( 6%) wall    5100 kB ( 6%) ggc
+ preprocessing           :   0.09 (14%) usr   0.08 (21%) sys   0.19 (18%) wall    8367 kB (10%) ggc
+ parser (global)         :   0.30 (48%) usr   0.22 (58%) sys   0.45 (44%) wall   44126 kB (55%) ggc
+ parser struct body      :   0.03 ( 5%) usr   0.02 ( 5%) sys   0.04 ( 4%) wall    3405 kB ( 4%) ggc
+ parser inl. func. body  :   0.07 (11%) usr   0.05 (13%) sys   0.22 (21%) wall    7608 kB (10%) ggc
+ parser inl. meth. body  :   0.02 ( 3%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall    3418 kB ( 4%) ggc
+ template instantiation  :   0.09 (14%) usr   0.00 ( 0%) sys   0.07 ( 7%) wall    9068 kB (11%) ggc
+ varconst                :   0.00 ( 0%) usr   0.01 ( 3%) sys   0.00 ( 0%) wall       0 kB ( 0%) ggc
+ integrated RA           :   0.01 ( 2%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     744 kB ( 1%) ggc
+ LRA non-specific        :   0.01 ( 2%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall       6 kB ( 0%) ggc
+ shorten branches        :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall       0 kB ( 0%) ggc
+ initialize rtl          :   0.01 ( 2%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall      12 kB ( 0%) ggc
+ rest of compilation     :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall      68 kB ( 0%) ggc
+ TOTAL                 :   0.63             0.38             1.03              79746 kB
+
+Execution times (seconds)
+ phase setup             :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall    1386 kB ( 1%) ggc
+ phase parsing           :   0.81 (64%) usr   0.36 (88%) sys   1.18 (70%) wall  104336 kB (73%) ggc
+ phase lang. deferred    :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall     804 kB ( 1%) ggc
+ phase opt and generate  :   0.45 (35%) usr   0.05 (12%) sys   0.50 (30%) wall   35449 kB (25%) ggc
+ |name lookup            :   0.19 (15%) usr   0.01 ( 2%) sys   0.13 ( 8%) wall    4088 kB ( 3%) ggc
+ |overload resolution    :   0.04 ( 3%) usr   0.00 ( 0%) sys   0.05 ( 3%) wall    7399 kB ( 5%) ggc
+ callgraph construction  :   0.03 ( 2%) usr   0.00 ( 0%) sys   0.05 ( 3%) wall    4727 kB ( 3%) ggc
+ callgraph optimization  :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     411 kB ( 0%) ggc
+ cfg cleanup             :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall      11 kB ( 0%) ggc
+ trivially dead code     :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall       0 kB ( 0%) ggc
+ df scan insns           :   0.02 ( 2%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall      24 kB ( 0%) ggc
+ df live regs            :   0.02 ( 2%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall       0 kB ( 0%) ggc
+ df reg dead/unused notes:   0.02 ( 2%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     527 kB ( 0%) ggc
+ register information    :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall       0 kB ( 0%) ggc
+ alias analysis          :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall     188 kB ( 0%) ggc
+ rebuild jump labels     :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall       0 kB ( 0%) ggc
+ preprocessing           :   0.11 ( 9%) usr   0.13 (32%) sys   0.26 (15%) wall   13290 kB ( 9%) ggc
+ parser (global)         :   0.40 (31%) usr   0.17 (41%) sys   0.43 (25%) wall   61318 kB (43%) ggc
+ parser struct body      :   0.05 ( 4%) usr   0.01 ( 2%) sys   0.05 ( 3%) wall    3651 kB ( 3%) ggc
+ parser function body    :   0.06 ( 5%) usr   0.01 ( 2%) sys   0.11 ( 7%) wall    2625 kB ( 2%) ggc
+ parser inl. func. body  :   0.10 ( 8%) usr   0.03 ( 7%) sys   0.25 (15%) wall    8731 kB ( 6%) ggc
+ parser inl. meth. body  :   0.04 ( 3%) usr   0.00 ( 0%) sys   0.02 ( 1%) wall    3420 kB ( 2%) ggc
+ template instantiation  :   0.06 ( 5%) usr   0.01 ( 2%) sys   0.06 ( 4%) wall   11819 kB ( 8%) ggc
+ early inlining heuristics:   0.01 ( 1%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall     122 kB ( 0%) ggc
+ integration             :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall    1576 kB ( 1%) ggc
+ tree gimplify           :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall    3329 kB ( 2%) ggc
+ tree CFG construction   :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall    1351 kB ( 1%) ggc
+ tree PHI insertion      :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     533 kB ( 0%) ggc
+ tree SSA rewrite        :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall    1040 kB ( 1%) ggc
+ tree SSA other          :   0.01 ( 1%) usr   0.01 ( 2%) sys   0.01 ( 1%) wall      40 kB ( 0%) ggc
+ tree operand scan       :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall    1443 kB ( 1%) ggc
+ dominance computation   :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall       0 kB ( 0%) ggc
+ out of ssa              :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall      67 kB ( 0%) ggc
+ expand                  :   0.02 ( 2%) usr   0.00 ( 0%) sys   0.06 ( 4%) wall    5892 kB ( 4%) ggc
+ loop init               :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     194 kB ( 0%) ggc
+ integrated RA           :   0.12 ( 9%) usr   0.01 ( 2%) sys   0.10 ( 6%) wall    9262 kB ( 7%) ggc
+ LRA non-specific        :   0.04 ( 3%) usr   0.00 ( 0%) sys   0.06 ( 4%) wall     151 kB ( 0%) ggc
+ LRA virtuals elimination:   0.00 ( 0%) usr   0.01 ( 2%) sys   0.02 ( 1%) wall     696 kB ( 0%) ggc
+ LRA hard reg assignment :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall       0 kB ( 0%) ggc
+ thread pro- & epilogue  :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall     418 kB ( 0%) ggc
+ shorten branches        :   0.01 ( 1%) usr   0.01 ( 2%) sys   0.01 ( 1%) wall       0 kB ( 0%) ggc
+ final                   :   0.00 ( 0%) usr   0.01 ( 2%) sys   0.02 ( 1%) wall     979 kB ( 1%) ggc
+ initialize rtl          :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 1%) wall      12 kB ( 0%) ggc
+ rest of compilation     :   0.04 ( 3%) usr   0.00 ( 0%) sys   0.05 ( 3%) wall     713 kB ( 1%) ggc
+ unaccounted todo        :   0.01 ( 1%) usr   0.00 ( 0%) sys   0.00 ( 0%) wall      16 kB ( 0%) ggc
+ TOTAL                 :   1.27             0.41             1.69             141987 kB
+
+Execution times (seconds)
+ phase setup             :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 4%) wall    1386 kB ( 6%) ggc
+ phase parsing           :   0.14 (100%) usr   0.09 (100%) sys   0.24 (96%) wall   20299 kB (93%) ggc
+ |name lookup            :   0.02 (14%) usr   0.02 (22%) sys   0.03 (12%) wall    1345 kB ( 6%) ggc
+ preprocessing           :   0.05 (36%) usr   0.03 (33%) sys   0.11 (44%) wall    5530 kB (25%) ggc
+ parser (global)         :   0.07 (50%) usr   0.02 (22%) sys   0.08 (32%) wall   12865 kB (59%) ggc
+ parser struct body      :   0.00 ( 0%) usr   0.00 ( 0%) sys   0.01 ( 4%) wall     476 kB ( 2%) ggc
+ parser enumerator list  :   0.01 ( 7%) usr   0.00 ( 0%) sys   0.01 ( 4%) wall     226 kB ( 1%) ggc
+ parser inl. func. body  :   0.01 ( 7%) usr   0.03 (33%) sys   0.03 (12%) wall    1096 kB ( 5%) ggc
+ varconst                :   0.00 ( 0%) usr   0.01 (11%) sys   0.00 ( 0%) wall       0 kB ( 0%) ggc
+ TOTAL                 :   0.14             0.09             0.25              21812 kB
