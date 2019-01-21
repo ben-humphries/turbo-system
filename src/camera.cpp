@@ -16,6 +16,8 @@ void Camera::init(Math::vec3 position, float yaw, float pitch)
 	this->position = position;
 	this->yaw = yaw;
 	this->pitch = pitch;
+
+
 	update_vectors();
 }
 

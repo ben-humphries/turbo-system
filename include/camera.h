@@ -17,6 +17,7 @@ struct Camera {
 	Math::vec3 position;
 	Math::vec3 up;
 	Math::vec3 forward;
+
 	float yaw;
 	float pitch;
 	Math::mat4 get_view_matrix();

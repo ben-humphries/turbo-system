@@ -119,7 +119,7 @@ namespace Math {
 			for(int j = 0; j < 4; j++) {
 				float sum = 0.0f;
 				for(int k = 0; k < 4; k++) {
-					sum += this->get(i,k)*m.get(k,j);
+					sum += this->get(k,j)*m.get(i,k);
 				}
 				
 				f.set(i,j, sum);

@@ -29,7 +29,7 @@ namespace Renderer {
 		projection_matrix = Math::perspective(Math::radians(45.0f),
 											 (float) SDL_State::state.width / SDL_State::state.height,
 											 0.1f, 300.0f);
-
+			
 		Model::models.alloc();
 		Texture::textures.alloc();
 		Shader::shaders.alloc();
@@ -39,7 +39,9 @@ namespace Renderer {
 	{
 		texture->use_texture();
 		shader->use_program();
-		shader->set_mat4_uniform("transform", projection_matrix * camera->get_view_matrix() * model_matrix);
+		Math::mat4 view_matrix = camera->get_view_matrix();
+		
+		shader->set_mat4_uniform("transform", projection_matrix * view_matrix * model_matrix);
 		model->render();
 	}
 	
