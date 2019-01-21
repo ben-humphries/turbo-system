@@ -12,6 +12,7 @@ void Transform::move(Math::vec3 movement)
 
 void Entity::base_initialize()
 {
+	name = "ROOT";
 	shader = Renderer::Shader::get_shader("default", "res/vertex.glsl", "res/fragment.glsl");
 	parent = NULL;
 	children.alloc();
@@ -22,6 +23,7 @@ void Entity::add_child(Entity * entity)
 	children.push(entity);
 	entity->base_initialize();
 	entity->initialize();
+	entity->parent = this;
 }
 
 void Entity::initialize() {}

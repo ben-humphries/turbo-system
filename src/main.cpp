@@ -26,6 +26,7 @@ struct Monkey : Entity {
 	Renderer::Texture * texture;
 	virtual void initialize()
 	{
+		name = "Monkey";
 		model = Renderer::Model::get_model("res/player.ply");
 		texture = Renderer::Texture::get_texture("res/marble.png");
 	}
@@ -34,6 +35,8 @@ struct Monkey : Entity {
 		Renderer::render(model, texture, shader, camera, transform.model_matrix);
 	}
 };
+
+void draw_debug(Entity * root);
 
 int main()
 {
@@ -59,12 +62,21 @@ int main()
 	root->base_initialize();
 
 	root->add_child(new Monkey());
+	root->add_child(new Monkey());
+	root->add_child(new Monkey());
+	root->add_child(new Monkey());
+	root->children[2]->add_child(new Monkey());
+
+	for(int i = 0; i < 10; i++) {
+		Monkey * m = new Monkey();
+		m->transform.model_matrix = Math::get_translation_matrix(Math::vec3(2,i,0));
+		root->children[0]->add_child(m);
+	}
 
 	// Main loop
 	SDL_Event event;
 	bool running = true;
 	bool debug_mode = false;
-	
 	while (running) {
 		while (SDL_PollEvent(&event)) {
 			if (debug_mode) {
@@ -123,18 +135,7 @@ int main()
 
 		// ImGui
 		if (debug_mode) {
-			ImGui_ImplOpenGL3_NewFrame();
-			ImGui_ImplSDL2_NewFrame(SDL_State::state.window);
-			ImGui::NewFrame();
-
-			{
-				ImGui::Begin("test!");
-				ImGui::Text("DAE Galaxybrain????");
-				ImGui::End();
-			}
-		
-			ImGui::Render();
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+			draw_debug(root);
 		}
 
 		// Finish render
@@ -148,4 +149,32 @@ int main()
 			//printf("%f                  \r", 1.0 / SDL_State::state.delta_time);
 		}
 	}
+}
+
+void add_entity_to_hierarchy(Entity * root)
+{
+	ImGui::Text(root->name);
+	for(int i = 0; i < root->children.size; i++) {
+		if(i == 0) ImGui::Indent();
+		add_entity_to_hierarchy(root->children[i]);
+		if(i == root->children.size - 1) ImGui::Unindent();
+	}
+}
+
+void draw_debug(Entity * root)
+{
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame(SDL_State::state.window);
+	ImGui::NewFrame();
+	
+	{	
+		ImGui::SetNextWindowPos(ImVec2(0,0));
+		ImGui::SetNextWindowSize(ImVec2(200,400));
+		ImGui::Begin("Entity Hierarchy");
+		add_entity_to_hierarchy(root);
+		ImGui::End();
+	}
+	
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

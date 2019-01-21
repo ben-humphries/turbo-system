@@ -11,13 +11,14 @@ struct Transform {
 };
 
 struct Entity {
+	const char * name = "default-name";
 	Transform transform;
 	Renderer::Shader * shader;
 
 	Entity * parent;
 	List<Entity*> children;
 	
-	void base_initialize();
+	void base_iI figure the default can just be the nitialize();
 	void add_child(Entity * entity);
 	virtual void initialize();
 	virtual void update();
