@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <math.h>
+
 char * load_string_from_file(const char * path)
 {
 	FILE * file = fopen(path, "r");
@@ -22,6 +24,12 @@ namespace Math {
 		float y;
 		float z;
 
+		vec3()
+		{
+			x = 0;
+			y = 0;
+			z = 0;
+		}
 		vec3(float value)
 		{
 			x = value;
@@ -34,6 +42,39 @@ namespace Math {
 			x = xv;
 			y = yv;
 			z = zv;
+		}
+
+		vec3 operator+(const vec3 & v) const
+		{
+			return vec3(
+				this->x + v.x,
+				this->y + v.y,
+				this->z + v.z);
+			
+		}
+
+		vec3 operator-(const vec3 & v) const
+		{
+			return vec3(
+				this->x - v.x,
+				this->y - v.y,
+				this->z - v.z);
+		}
+
+		vec3 operator*(const vec3 & v) const
+		{
+			return vec3(
+				this->x * v.x,
+				this->y * v.y,
+				this->z * v.z);
+		}
+
+		vec3 operator/(const vec3 & v) const
+		{
+			return vec3(
+				this->x / v.x,
+				this->y / v.y,
+				this->z / v.z);
 		}
 	};
 
@@ -67,8 +108,141 @@ namespace Math {
 		{
 			return values;
 		}
+
+		mat4 operator*(mat4 & m)
+		{
+			mat4 f = mat4();
+
+			for(int i = 0; i < 4; i++) {
+				for(int j = 0; j < 4; j++) {
+					float sum = 0.0f;
+					for(int k = 0; k < 4; k++) {
+						sum += this->get(i,k)*m.get(k,j);
+					}
+
+					f.set(i,j, sum);
+				}
+			}
+
+			return f;
+		}
 	};
 
+	float dot(const vec3 & a, const vec3 & b)
+	{
+		return a.x * b.x + a.y * b.y + a.z * b.z;
+	}
+
+	vec3 cross(const vec3 & a, const vec3 & b)
+	{
+		return vec3(
+			a.y*b.z - a.z*b.y,
+			a.z*b.x - a.x*b.z,
+			a.x*b.y - a.y*b.x);
+	}
+
+	vec3 normalize(const vec3 & v)
+	{
+		return v / sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
+	}
+
+	mat4 look_at(const vec3 & eye, const vec3 & center, const vec3 & up)
+	{
+		vec3 F = center - eye;
+		vec3 f = normalize(F);
+		vec3 UP = normalize(up);
+
+		vec3 s = cross(f, UP);
+		vec3 u = cross(normalize(s), f);
+
+		mat4 m = mat4();
+
+		m.set(0,0, s.x);
+		m.set(1,0, s.y);
+		m.set(2,0, s.z);
+
+		m.set(0,1, u.x);
+		m.set(1,1, u.y);
+		m.set(2,1, u.z);
+
+		m.set(0,2, -f.x);
+		m.set(1,2, -f.y);
+		m.set(2,2, -f.z);
+
+		return m;
+	}
+
+	mat4 perspective(float fov, float aspect, float near, float far)
+	{
+		mat4 m = mat4();
+
+
+		float f_depth = far - near;
+		float one_over_f_depth = 1 / f_depth;
+
+		m.set(1,1, 1 / tan(0.5f * fov));
+		m.set(0,0, -m.get(1,1) / aspect);
+		m.set(2,2, far * one_over_f_depth);
+		m.set(3,2, (-far * near) * one_over_f_depth);
+		m.set(2,3, 1);
+		m.set(3,3, 0);
+
+		return m;
+	}
+
+	mat4 get_translation_matrix(const vec3 & v)
+	{
+		mat4 m = mat4();
+		m.set(0,3, v.x);
+		m.set(1,3, v.y);
+		m.set(2,3, v.z);
+
+		return m;
+	}
+
+	mat4 get_rotation_matrix(const vec3 & axis, const float theta)
+	{
+		//https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations
+		mat4 m = mat4();
+
+		float costheta = cos(theta);
+		float sintheta = sin(theta);
+		
+		
+		m.set(0,0, costheta+axis.x*axis.x*(1-costheta));
+		m.set(0,1, axis.x*axis.y*(1-costheta)-axis.z*sintheta);
+		m.set(0,2, axis.x*axis.z*(1-costheta)+axis.y*sintheta);
+		m.set(1,0, axis.y*axis.x*(1-costheta)+axis.z*sintheta);
+		m.set(1,1, costheta+axis.y*axis.y*(1-costheta));
+		m.set(1,2, axis.y*axis.z*(1-costheta)-axis.x*sintheta);
+		m.set(2,0, axis.z*axis.x*(1-costheta)-axis.y*sintheta);
+		m.set(2,1, axis.z*axis.y*(1-costheta)+axis.x*sintheta);
+		m.set(2,2, costheta+axis.z*axis.z*(1-costheta));
+
+		return m;
+	}
+
+	mat4 get_scale_matrix(const vec3 & v)
+	{
+		mat4 m = mat4();
+
+		m.set(0,0, v.x);
+		m.set(1,1, v.y);
+		m.set(2,2, v.z);
+
+		return m;
+	}
+
+
+	
+	mat4 get_model_matrix(
+		mat4 & translation_matrix,
+		mat4 & rotation_matrix,
+		mat4 & scale_matrix)
+	{
+		return translation_matrix * rotation_matrix * scale_matrix;
+	}
+	
 	void test_mat4()
 	{
 		mat4 test = mat4();
