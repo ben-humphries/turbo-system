@@ -39,6 +39,7 @@ struct Monkey : Entity {
 
 int main()
 {
+	Math::test_mat4();
 	// Program initialization
 	SDL_State::state.init(800, 600);
 	Renderer::initialize_renderer();

@@ -73,6 +73,7 @@ namespace Renderer {
 
 	void Shader::set_mat4_uniform(const char * uniform_name, glm::mat4 value)
 	{
+		//glm::value_ptr returns COLUMN MAJOR matrix
 		glUniformMatrix4fv(glGetUniformLocation(program, uniform_name),
 						   1, GL_FALSE, glm::value_ptr(value));
 	}
