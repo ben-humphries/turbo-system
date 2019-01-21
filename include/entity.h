@@ -18,7 +18,7 @@ struct Entity {
 	Entity * parent;
 	List<Entity*> children;
 	
-	void base_iI figure the default can just be the nitialize();
+	void base_initialize();
 	void add_child(Entity * entity);
 	virtual void initialize();
 	virtual void update();

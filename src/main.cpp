@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <math.h>
 
+#include <string.h>
+#include <stdlib.h>
+
 #undef	IMGUI_IMPL_OPENGL_LOADER_GL3W
 #undef	IMGUI_IMPL_OPENGL_LOADER_GLAD
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
@@ -151,13 +154,22 @@ int main()
 	}
 }
 
+
+static int hierarchy_counter = 0;
 void add_entity_to_hierarchy(Entity * root)
 {
-	ImGui::Text(root->name);
-	for(int i = 0; i < root->children.size; i++) {
-		if(i == 0) ImGui::Indent();
-		add_entity_to_hierarchy(root->children[i]);
-		if(i == root->children.size - 1) ImGui::Unindent();
+	hierarchy_counter++;
+	char buffer[100];
+	sprintf(buffer, "%s##%d",root->name, hierarchy_counter);
+	
+	if (ImGui::TreeNode(buffer)){
+		//ImGui::Indent();
+		//ImGui::Text("test");
+		for(int i = 0; i < root->children.size; i++) {
+			add_entity_to_hierarchy(root->children[i]);
+		}
+		//ImGui::Unindent();
+		ImGui::TreePop();
 	}
 }
 
@@ -172,9 +184,9 @@ void draw_debug(Entity * root)
 		ImGui::SetNextWindowSize(ImVec2(200,400));
 		ImGui::Begin("Entity Hierarchy");
 		add_entity_to_hierarchy(root);
+		hierarchy_counter = 0;
 		ImGui::End();
 	}
-	
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
