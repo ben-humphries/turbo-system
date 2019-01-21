@@ -3,6 +3,16 @@
 
 #include <math.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
+
+#define GLM_ENABLE_EXPERIMENTAL
+
+#include <iostream>
+
+
 char * load_string_from_file(const char * path)
 {
 	FILE * file = fopen(path, "r");
@@ -128,6 +138,10 @@ namespace Math {
 		}
 	};
 
+	float radians(float degrees)
+	{
+		return degrees * 0.0174533f;
+	}
 	float dot(const vec3 & a, const vec3 & b)
 	{
 		return a.x * b.x + a.y * b.y + a.z * b.z;
@@ -148,26 +162,32 @@ namespace Math {
 
 	mat4 look_at(const vec3 & eye, const vec3 & center, const vec3 & up)
 	{
-		vec3 F = center - eye;
-		vec3 f = normalize(F);
-		vec3 UP = normalize(up);
-
-		vec3 s = cross(f, UP);
-		vec3 u = cross(normalize(s), f);
-
 		mat4 m = mat4();
 
-		m.set(0,0, s.x);
-		m.set(1,0, s.y);
-		m.set(2,0, s.z);
 
-		m.set(0,1, u.x);
-		m.set(1,1, u.y);
-		m.set(2,1, u.z);
+		vec3 x, y, z;
+		
+		z = normalize(eye - center);
+		x = cross(up, z);
+		y = normalize(cross(z, x));
 
-		m.set(0,2, -f.x);
-		m.set(1,2, -f.y);
-		m.set(2,2, -f.z);
+		x = normalize(x);
+
+		m.set(0,0, x.x);
+		m.set(1,0, x.y);
+		m.set(2,0, x.z);
+		m.set(3,0, -dot(x, eye));
+
+		m.set(0,1, y.x);
+		m.set(1,1, y.y);
+		m.set(2,1, y.z);
+		m.set(3,1, -dot(y, eye));
+
+		m.set(0,2, z.x);
+		m.set(1,2, z.y);
+		m.set(2,2, z.z);
+		m.set(3,2, -dot(z, eye));
+		
 
 		return m;
 	}
@@ -176,15 +196,13 @@ namespace Math {
 	{
 		mat4 m = mat4();
 
+		float f = 1 / tan(fov/2);
 
-		float f_depth = far - near;
-		float one_over_f_depth = 1 / f_depth;
-
-		m.set(1,1, 1 / tan(0.5f * fov));
-		m.set(0,0, -m.get(1,1) / aspect);
-		m.set(2,2, far * one_over_f_depth);
-		m.set(3,2, (-far * near) * one_over_f_depth);
-		m.set(2,3, 1);
+		m.set(0,0, f / aspect);
+		m.set(1,1, f);
+		m.set(2,2, (far+near) / (near-far));
+		m.set(3,2, (2*far*near) / (near-far));
+		m.set(2,3, -1);
 		m.set(3,3, 0);
 
 		return m;
@@ -193,9 +211,9 @@ namespace Math {
 	mat4 get_translation_matrix(const vec3 & v)
 	{
 		mat4 m = mat4();
-		m.set(0,3, v.x);
-		m.set(1,3, v.y);
-		m.set(2,3, v.z);
+		m.set(3,0, v.x);
+		m.set(3,1, v.y);
+		m.set(3,2, v.z);
 
 		return m;
 	}
@@ -210,13 +228,13 @@ namespace Math {
 		
 		
 		m.set(0,0, costheta+axis.x*axis.x*(1-costheta));
-		m.set(0,1, axis.x*axis.y*(1-costheta)-axis.z*sintheta);
-		m.set(0,2, axis.x*axis.z*(1-costheta)+axis.y*sintheta);
-		m.set(1,0, axis.y*axis.x*(1-costheta)+axis.z*sintheta);
+		m.set(1,0, axis.x*axis.y*(1-costheta)-axis.z*sintheta);
+		m.set(2,0, axis.x*axis.z*(1-costheta)+axis.y*sintheta);
+		m.set(0,1, axis.y*axis.x*(1-costheta)+axis.z*sintheta);
 		m.set(1,1, costheta+axis.y*axis.y*(1-costheta));
-		m.set(1,2, axis.y*axis.z*(1-costheta)-axis.x*sintheta);
-		m.set(2,0, axis.z*axis.x*(1-costheta)-axis.y*sintheta);
-		m.set(2,1, axis.z*axis.y*(1-costheta)+axis.x*sintheta);
+		m.set(2,1, axis.y*axis.z*(1-costheta)-axis.x*sintheta);
+		m.set(0,2, axis.z*axis.x*(1-costheta)-axis.y*sintheta);
+		m.set(1,2, axis.z*axis.y*(1-costheta)+axis.x*sintheta);
 		m.set(2,2, costheta+axis.z*axis.z*(1-costheta));
 
 		return m;
@@ -242,25 +260,85 @@ namespace Math {
 	{
 		return translation_matrix * rotation_matrix * scale_matrix;
 	}
-	
-	void test_mat4()
+
+	void print_mat4(mat4 & m)
 	{
-		mat4 test = mat4();
-
-		test.set(3, 0, 5);
-
 		for(int x = 0; x < 4; x ++){
 			for(int y = 0; y < 4; y ++){
-				printf("%f ", test.get(y, x));
+				printf("%f ", m.get(y, x));
 			}
 			printf("\n");
 		}
+		printf("\n");
+	}
 
-		float * ptr = test.get_ptr();
+	void print_vec3(vec3 & v)
+	{
+		printf("%f %f %f\n\n", v.x, v.y, v.z);
+	}
 
-		for(int i = 0; i < 16; i++){
-			printf("%f ", ptr[i]);
+	void print_glmmat4(glm::mat4 & m)
+	{
+		for(int x = 0; x < 4; x ++){
+			for(int y = 0; y < 4; y ++){
+				printf("%f ", m[y][x]);
+			}
+			printf("\n");
 		}
+		printf("\n");
+	}
+
+	void print_glmvec3(glm::vec3 & v)
+	{
+		printf("%f %f %f\n\n", v.x, v.y, v.z);
+	}
+
+	//tested:
+	//set/add
+	//pointer
+	//multiplication operator
+	//look_at
+	//perspective (and radians)
+	//translation_matrix NOTE: doesn't work exactly as glm does. instead of adding, this is meant to be a one-time function call. Should store position separately and create matrices only when rendering.
+	//rotation_matrix NOTE: same as translation_matrix.
+	//scale_matrix NOTE: same as translation_matrix.
+	void test_mat4()
+	{
+		//my mat4
+		mat4 test = mat4();
+		
+		//glm mat4
+		glm::mat4 glmtest = glm::mat4(1);
+
+		test = get_scale_matrix(vec3(2,1,3));
+		glmtest = glm::scale(glmtest, glm::vec3(2,1,3));
+	
+		
+		print_mat4(test);
+		print_glmmat4(glmtest);
+	}
+
+	//tested:
+	//addition operator
+	//subtraction operator
+	//multiplication operator
+	//division operator
+	//dot product
+	//cross product
+	//normalize
+	void test_vec3()
+	{
+		vec3 test = vec3(1,2,3);
+		vec3 test2 = test;
+
+		glm::vec3 glmtest = glm::vec3(1,2,3);
+		glm::vec3 glmtest2 = glm::vec3(4,1,4);
+
+		test = vec3(1,0,0) - vec3(0,1,0);
+		glmtest = normalize(glmtest);
+		
+		print_vec3(test);
+		print_glmvec3(glmtest);
 	}
 		
 } //namespace Math

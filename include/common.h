@@ -19,7 +19,6 @@ namespace Math {
 		vec3 operator-(const vec3 & v) const;
 		vec3 operator*(const vec3 & v) const;
 		vec3 operator/(const vec3 & v) const;
-
 	};
 
 	struct mat4 {
@@ -34,6 +33,8 @@ namespace Math {
 		mat4 operator*(mat4 & m);
 	};
 
+	float radians(float degrees);
+
 	float dot(const vec3 & a, const vec3 & b);
 	vec3 cross(const vec3 & a, const vec3 & b);
 	vec3 normalize(const vec3 & v);
@@ -41,6 +42,7 @@ namespace Math {
 	mat4 look_at(const vec3 & eye, const vec3 & center, const vec3 & up);
 	mat4 perspective(float fov, float aspect, float near, float far);
 	mat4 get_translation_matrix(const vec3 & v);
+	//TODO(ben-humphries): make this use euler angles
 	mat4 get_rotation_matrix(const vec3 & axis, const float theta);
 	mat4 get_scale_matrix(const vec3 & v);
 	
@@ -48,7 +50,11 @@ namespace Math {
 		mat4 & translation_matrix,
 		mat4 & rotation_matrix,
 		mat4 & scale_matrix);
-		
+
+	void print_mat4(mat4 & m);
+	void print_vec3(vec3 & v);
+	
 	void test_mat4();
+	void test_vec3();
 
 }//namespace Math
