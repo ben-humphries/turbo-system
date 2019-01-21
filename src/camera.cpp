@@ -4,12 +4,14 @@
 #include <glm/trigonometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-glm::mat4 Camera::get_view_matrix()
+#include <math.h>
+
+Math::mat4 Camera::get_view_matrix()
 {
-	return glm::lookAt(position, position + forward, up);
+	return Math::look_at(position, position + forward, up);
 }
 
-void Camera::init(glm::vec3 position, float yaw, float pitch)
+void Camera::init(Math::vec3 position, float yaw, float pitch)
 {
 	this->position = position;
 	this->yaw = yaw;
@@ -19,34 +21,35 @@ void Camera::init(glm::vec3 position, float yaw, float pitch)
 
 void Camera::update_vectors()
 {
-    forward.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    forward.y = sin(glm::radians(pitch));
-    forward.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    forward = glm::normalize(forward);
+    forward.x = cos(Math::radians(yaw)) * cos(Math::radians(pitch));
+    forward.y = sin(Math::radians(pitch));
+    forward.z = sin(Math::radians(yaw)) * cos(Math::radians(pitch));
+    forward = Math::normalize(forward);
 
-    glm::vec3 right = glm::normalize(glm::cross(forward, glm::vec3(0,1,0)));
-    up = glm::normalize(glm::cross(right, forward));
+    Math::vec3 right = Math::normalize(Math::cross(forward, Math::vec3(0,1,0)));
+    up = Math::normalize(Math::cross(right, forward));
 }
 
 void Camera::move_in_direction(Direction direction)
 {
 	float speed = 1.0 * SDL_State::state.delta_time;
 
-	glm::vec3 left_right = glm::normalize(glm::cross(forward, up)) * speed;
-	glm::vec3 forward_back = glm::vec3(forward.x, 0.0, forward.z) * speed;
-	
+	Math::vec3 left_right = Math::normalize(Math::cross(forward, up)) * speed;
+	Math::vec3 forward_back = Math::vec3(forward.x, 0.0, forward.z) * speed;
+
+	//TODO(ben-humphries): implement += and -= operators so this can be cleaner
 	switch (direction) {
 	case DIR_LEFT:
-		position -= left_right;
+		position = position - left_right;
 		break;
 	case DIR_RIGHT:
-		position += left_right;
+		position = position + left_right;
 		break;
 	case DIR_FORWARD:
-		position += forward_back;
+		position = position + forward_back;
 		break;
 	case DIR_BACK:
-		position -= forward_back;
+		position = position - forward_back;
 		break;
 	}
 

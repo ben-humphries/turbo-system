@@ -1,15 +1,16 @@
 #pragma once
 
+#include "common.h"
 #include "renderer.h"
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
 struct Transform {
-	glm::mat4 model_matrix;
+	Math::mat4 model_matrix;
 	
 	void init();
-	void move(glm::vec3 movement);
+	void move(Math::vec3 movement);
 };
 
 struct Entity {

@@ -2,12 +2,12 @@
 
 void Transform::init()
 {
-	model_matrix = glm::mat4(1);
+	model_matrix = Math::mat4();
 }
 
-void Transform::move(glm::vec3 movement)
+void Transform::move(Math::vec3 movement)
 {
-	model_matrix = glm::translate(model_matrix, movement);
+	model_matrix = Math::get_translation_matrix(movement);
 }
 
 void Entity::base_initialize()

@@ -30,7 +30,7 @@ namespace Math {
 		float set(int x, int y, float val);
 		float * get_ptr();
 
-		mat4 operator*(mat4 & m);
+		mat4 operator*(mat4 m);
 	};
 
 	float radians(float degrees);

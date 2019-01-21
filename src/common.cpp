@@ -119,7 +119,7 @@ namespace Math {
 			return values;
 		}
 
-		mat4 operator*(mat4 & m)
+		mat4 operator*(mat4 m)
 		{
 			mat4 f = mat4();
 

@@ -44,7 +44,7 @@ int main()
 	Renderer::initialize_renderer();
 	
 	Camera camera;
-	camera.init(glm::vec3(0, 0, -3), 90, -20);
+	camera.init(Math::vec3(0, 0, -3), 90, -20);
 
 	// Dear ImGui
 	IMGUI_CHECKVERSION();
@@ -67,9 +67,9 @@ int main()
 	root->children[0]->add_child(new Monkey());
 
 	for (int i = 0; i < root->children.size; i++) {
-		root->children[i]->transform.move(glm::vec3(0, i, 0));
+		root->children[i]->transform.move(Math::vec3(0, i, 0));
 	}
-	root->children[0]->children[0]->transform.move(glm::vec3(3, 0, 0));
+	root->children[0]->children[0]->transform.move(Math::vec3(3, 0, 0));
 
 	// Main loop
 	SDL_Event event;

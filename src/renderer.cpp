@@ -22,11 +22,11 @@ namespace Renderer {
 	 * Rendering
 	 */
 	
-	glm::mat4 projection_matrix(1);
+	Math::mat4 projection_matrix = Math::mat4();
 
 	void initialize_renderer()
 	{
-		projection_matrix = glm::perspective(glm::radians(45.0f),
+		projection_matrix = Math::perspective(Math::radians(45.0f),
 											 (float) SDL_State::state.width / SDL_State::state.height,
 											 0.1f, 300.0f);
 
@@ -35,7 +35,7 @@ namespace Renderer {
 		Shader::shaders.alloc();
 	}
 	
-	void render(Model * model, Texture * texture, Shader * shader, Camera * camera, glm::mat4 model_matrix)
+	void render(Model * model, Texture * texture, Shader * shader, Camera * camera, Math::mat4 model_matrix)
 	{
 		texture->use_texture();
 		shader->use_program();
@@ -71,11 +71,11 @@ namespace Renderer {
 		return shader;
 	}
 
-	void Shader::set_mat4_uniform(const char * uniform_name, glm::mat4 value)
+	void Shader::set_mat4_uniform(const char * uniform_name, Math::mat4 value)
 	{
 		//glm::value_ptr returns COLUMN MAJOR matrix
 		glUniformMatrix4fv(glGetUniformLocation(program, uniform_name),
-						   1, GL_FALSE, glm::value_ptr(value));
+			1, GL_FALSE, value.get_ptr());
 	}
 
 	void Shader::use_program()

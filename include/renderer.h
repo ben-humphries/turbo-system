@@ -6,6 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "common.h"
 #include "dictionary.h"
 
 struct Camera; // "camera.h"
@@ -50,7 +51,7 @@ namespace Renderer {
 		const char * fragment_path;
 		GLuint program;
 
-		void set_mat4_uniform(const char * uniform_name, glm::mat4 value);
+		void set_mat4_uniform(const char * uniform_name, Math::mat4 value);
 		void use_program();
 	
 		static Shader * load_from_source(const char * vertex_path,
@@ -63,5 +64,5 @@ namespace Renderer {
 	};
 
 	void initialize_renderer();
-	void render(Model * model, Texture * texture, Shader * shader, Camera * camera, glm::mat4 model_matrix);
+	void render(Model * model, Texture * texture, Shader * shader, Camera * camera, Math::mat4 model_matrix);
 }
