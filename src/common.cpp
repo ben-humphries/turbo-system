@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "common.h"
+
 #include <math.h>
 
 #include <glm/glm.hpp>
@@ -29,114 +31,103 @@ char * load_string_from_file(const char * path)
 
 namespace Math {
 
-	struct vec3 {
-		float x;
-		float y;
-		float z;
+	vec3::vec3()
+	{
+		x = 0;
+		y = 0;
+		z = 0;
+	}
+	vec3::vec3(float value)
+	{
+		x = value;
+		y = value;
+		z = value;
+	}
+	
+	vec3::vec3(float xv, float yv, float zv)
+	{
+		x = xv;
+		y = yv;
+		z = zv;
+	}
+	
+	vec3 vec3::operator+(const vec3 & v) const
+	{
+		return vec3(
+			this->x + v.x,
+			this->y + v.y,
+			this->z + v.z);
+		
+	}
+	
+	vec3 vec3::operator-(const vec3 & v) const
+	{
+		return vec3(
+			this->x - v.x,
+			this->y - v.y,
+			this->z - v.z);
+	}
+	
+	vec3 vec3::operator*(const vec3 & v) const
+	{
+		return vec3(
+			this->x * v.x,
+			this->y * v.y,
+			this->z * v.z);
+	}
+	
+	vec3 vec3::operator/(const vec3 & v) const
+	{
+		return vec3(
+			this->x / v.x,
+			this->y / v.y,
+			this->z / v.z);
+	}
 
-		vec3()
-		{
-			x = 0;
-			y = 0;
-			z = 0;
+	mat4::mat4()
+	{
+		for(int i = 0 ; i < 16; i++){
+			values[i] = 0;
 		}
-		vec3(float value)
-		{
-			x = value;
-			y = value;
-			z = value;
-		}
-
-		vec3(float xv, float yv, float zv)
-		{
-			x = xv;
-			y = yv;
-			z = zv;
-		}
-
-		vec3 operator+(const vec3 & v) const
-		{
-			return vec3(
-				this->x + v.x,
-				this->y + v.y,
-				this->z + v.z);
-			
-		}
-
-		vec3 operator-(const vec3 & v) const
-		{
-			return vec3(
-				this->x - v.x,
-				this->y - v.y,
-				this->z - v.z);
-		}
-
-		vec3 operator*(const vec3 & v) const
-		{
-			return vec3(
-				this->x * v.x,
-				this->y * v.y,
-				this->z * v.z);
-		}
-
-		vec3 operator/(const vec3 & v) const
-		{
-			return vec3(
-				this->x / v.x,
-				this->y / v.y,
-				this->z / v.z);
-		}
-	};
-
-	struct mat4 {
-
-		float values[16];
-
-		mat4()
-		{
-			for(int i = 0 ; i < 16; i++){
-					values[i] = 0;
-			}
-
-			values[0]  = 1;
-			values[5]  = 1;
-			values[10] = 1;
-			values[15] = 1;
-		}
-
-		float get(int x, int y)
-		{
-			return values[y + 4 * x];
-		}
-
-		void set(int x, int y, float val)
-		{
-			values[y + 4 * x] = val;
-		}
-
-		float * get_ptr()
-		{
-			return values;
-		}
-
-		mat4 operator*(mat4 m)
-		{
-			mat4 f = mat4();
-
-			for(int i = 0; i < 4; i++) {
-				for(int j = 0; j < 4; j++) {
-					float sum = 0.0f;
-					for(int k = 0; k < 4; k++) {
-						sum += this->get(i,k)*m.get(k,j);
-					}
-
-					f.set(i,j, sum);
+		
+		values[0]  = 1;
+		values[5]  = 1;
+		values[10] = 1;
+		values[15] = 1;
+	}
+	
+	float mat4::get(int x, int y)
+	{
+		return values[y + 4 * x];
+	}
+	
+	void mat4::set(int x, int y, float val)
+	{
+		values[y + 4 * x] = val;
+	}
+	
+	float * mat4::get_ptr()
+	{
+		return values;
+	}
+	
+	mat4 mat4::operator*(mat4 m)
+	{
+		mat4 f = mat4();
+		
+		for(int i = 0; i < 4; i++) {
+			for(int j = 0; j < 4; j++) {
+				float sum = 0.0f;
+				for(int k = 0; k < 4; k++) {
+					sum += this->get(i,k)*m.get(k,j);
 				}
+				
+				f.set(i,j, sum);
 			}
-
-			return f;
 		}
-	};
+		
+		return f;
+	}
 
 	float radians(float degrees)
 	{

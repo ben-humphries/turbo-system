@@ -27,7 +27,7 @@ namespace Math {
 		mat4();
 
 		float get(int x, int y);
-		float set(int x, int y, float val);
+		void set(int x, int y, float val);
 		float * get_ptr();
 
 		mat4 operator*(mat4 m);
