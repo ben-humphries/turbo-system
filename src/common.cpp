@@ -131,6 +131,17 @@ namespace Math {
 	{
 		return fmodf(f, m);
 	}
+
+	float min(float a, float b)
+	{
+		return (a < b) ? a : b;
+	}
+
+	float max(float a, float b)
+	{
+		return (a > b) ? a : b;
+	}
+	
 	float dot(const vec3 & a, const vec3 & b)
 	{
 		return a.x * b.x + a.y * b.y + a.z * b.z;

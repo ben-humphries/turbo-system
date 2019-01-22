@@ -36,6 +36,9 @@ namespace Math {
 	float radians(float degrees);
 	float mod(float f, float m);
 
+	float min(float a, float b);
+	float max(float a, float b);
+	
 	float dot(const vec3 & a, const vec3 & b);
 	vec3 cross(const vec3 & a, const vec3 & b);
 	vec3 normalize(const vec3 & v);
