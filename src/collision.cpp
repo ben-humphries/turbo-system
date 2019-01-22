@@ -1,5 +1,18 @@
 #include "collision.h"
 
+#include <stdio.h>
+
+void Box_Collider::init(Math::vec3 position, Math::vec3 size)
+{
+	this->position = position;
+	this->size = size;
+}
+
+void Sphere_Collider::init(Math::vec3 position, float radius)
+{
+	this->position = position;
+	this->radius = radius;
+}
 
 bool is_colliding(Box_Collider box1, Box_Collider box2)
 {
@@ -46,4 +59,22 @@ bool is_colliding(Sphere_Collider sphere, Box_Collider box)
 
 void test_collisions()
 {
+	printf("Running collision tests\n");
+
+	Box_Collider a;
+	a.init(Math::vec3(-2,-2,-2), Math::vec3(3,3,3));
+	Box_Collider b;
+	b.init(Math::vec3(0,0,0), Math::vec3(1,1,1));
+
+	Sphere_Collider sa;
+	sa.init(Math::vec3(0,0,0), 2);
+
+	Sphere_Collider sb;
+	sb.init(Math::vec3(3,0,0), 2);
+
+	printf("colliding: %d\n", is_colliding(a, b));
+	printf("colliding: %d\n", is_colliding(a, sa));
+	printf("colliding: %d\n", is_colliding(sb, b));
+	printf("colliding: %d\n", is_colliding(sb, sa));
+		
 }

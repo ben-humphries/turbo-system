@@ -23,6 +23,7 @@
 #include "renderer.h"
 #include "camera.h"
 #include "entity.h"
+#include "collision.h"
 
 struct Monkey : Entity {
 	Renderer::Model * model;
@@ -43,6 +44,7 @@ void draw_debug(Entity * root, Camera * camera);
 
 int main()
 {
+	test_collisions();
 	// Program initialization
 	SDL_State::state.init(800, 600);
 	Renderer::initialize_renderer();

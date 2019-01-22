@@ -6,11 +6,15 @@
 struct Box_Collider {
 	Math::vec3 position;
 	Math::vec3 size;
+
+	void init(Math::vec3 position, Math::vec3 size);
 };
 //Sphere Collider
 struct Sphere_Collider {
 	Math::vec3 position;
 	float radius;
+
+	void init(Math::vec3 position, float radius);
 };
 
 //Capsule Collider (?)
