@@ -5,9 +5,12 @@
 
 struct Transform {
 	Math::mat4 model_matrix;
+
+	Math::vec3 position;
 	
 	void init();
 	void move(Math::vec3 movement);
+	Math::mat4 get_model_matrix();
 };
 
 struct Entity {

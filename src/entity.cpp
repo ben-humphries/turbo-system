@@ -3,11 +3,17 @@
 void Transform::init()
 {
 	model_matrix = Math::mat4();
+	position = Math::vec3();
 }
 
 void Transform::move(Math::vec3 movement)
 {
-	model_matrix = Math::get_translation_matrix(movement);
+	position = position + movement;
+}
+
+Math::mat4 Transform::get_model_matrix()
+{
+	return Math::get_translation_matrix(position);
 }
 
 void Entity::base_initialize()

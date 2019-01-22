@@ -35,7 +35,7 @@ struct Monkey : Entity {
 	}
 	virtual void render(Camera * camera)
 	{
-		Renderer::render(model, texture, shader, camera, transform.model_matrix);
+		Renderer::render(model, texture, shader, camera, transform.get_model_matrix());
 	}
 };
 
@@ -72,7 +72,7 @@ int main()
 
 	for(int i = 0; i < 10; i++) {
 		Monkey * m = new Monkey();
-		m->transform.model_matrix = Math::get_translation_matrix(Math::vec3(2,i,0));
+		m->transform.move(Math::vec3(2,i,0));
 		root->children[0]->add_child(m);
 	}
 
@@ -154,37 +154,41 @@ int main()
 	}
 }
 
-
-static int hierarchy_counter = 0;
+static Entity * displaying;
 void add_entity_to_hierarchy(Entity * root)
 {
-	hierarchy_counter++;
-	char buffer[100];
-	sprintf(buffer, "%s##%d",root->name, hierarchy_counter);
-	
-	if (ImGui::TreeNode(buffer)){
-		//ImGui::Indent();
-		//ImGui::Text("test");
-		for(int i = 0; i < root->children.size; i++) {
-			add_entity_to_hierarchy(root->children[i]);
-		}
-		//ImGui::Unindent();
-		ImGui::TreePop();
+	ImGui::PushID(root);
+	if(ImGui::Button(root->name)){
+		displaying = root;
 	}
+	ImGui::PopID();
+	ImGui::Indent();
+	for(int i = 0; i < root->children.size; i++) {
+		add_entity_to_hierarchy(root->children[i]);
+	}
+	ImGui::Unindent();
 }
 
 void draw_debug(Entity * root)
 {
+	if(!displaying) displaying = root;
+	
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(SDL_State::state.window);
 	ImGui::NewFrame();
 	
 	{	
 		ImGui::SetNextWindowPos(ImVec2(0,0));
-		ImGui::SetNextWindowSize(ImVec2(200,400));
+		ImGui::SetNextWindowSize(ImVec2(200,500));
 		ImGui::Begin("Entity Hierarchy");
+		
+		ImGui::Text(displaying->name);
+		ImGui::InputFloat("X", &displaying->transform.position.x);
+		ImGui::InputFloat("Y", &displaying->transform.position.y);
+		ImGui::InputFloat("Z", &displaying->transform.position.z);
+		ImGui::Text("--------");
+
 		add_entity_to_hierarchy(root);
-		hierarchy_counter = 0;
 		ImGui::End();
 	}
 	ImGui::Render();
