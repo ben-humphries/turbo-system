@@ -39,7 +39,7 @@ struct Monkey : Entity {
 	}
 };
 
-void draw_debug(Entity * root);
+void draw_debug(Entity * root, Camera * camera);
 
 int main()
 {
@@ -114,7 +114,8 @@ int main()
 			camera.move_in_direction(DIR_RIGHT);
 		}
 		if (keystates[SDL_SCANCODE_ESCAPE]) {
-			running = false;
+			if(debug_mode) debug_mode = false;
+			else running = false;
 		}
 
 		// Rotate camera based on mouse movement
@@ -138,7 +139,7 @@ int main()
 
 		// ImGui
 		if (debug_mode) {
-			draw_debug(root);
+			draw_debug(root, &camera);
 		}
 
 		// Finish render
@@ -169,7 +170,7 @@ void add_entity_to_hierarchy(Entity * root)
 	ImGui::Unindent();
 }
 
-void draw_debug(Entity * root)
+void draw_debug(Entity * root, Camera * camera)
 {
 	if(!displaying) displaying = root;
 	
@@ -180,6 +181,8 @@ void draw_debug(Entity * root)
 	{	
 		ImGui::SetNextWindowPos(ImVec2(0,0));
 		ImGui::SetNextWindowSize(ImVec2(200,500));
+
+		
 		ImGui::Begin("Entity Hierarchy");
 		
 		ImGui::Text(displaying->name);
@@ -189,7 +192,23 @@ void draw_debug(Entity * root)
 		ImGui::Text("--------");
 
 		add_entity_to_hierarchy(root);
+		
 		ImGui::End();
+
+		ImGui::SetNextWindowPos(ImVec2(SDL_State::state.width - 200, 0));
+		ImGui::SetNextWindowSize(ImVec2(200, 300));
+
+		ImGui::Begin("Camera Info");
+
+		ImGui::InputFloat("X", &camera->position.x);
+		ImGui::InputFloat("Y", &camera->position.y);
+		ImGui::InputFloat("Z", &camera->position.z);
+		ImGui::Text("--------");
+		ImGui::InputFloat("YAW", &camera->yaw);
+		ImGui::InputFloat("PITCH", &camera->pitch);
+		ImGui::End();
+
+		
 	}
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
