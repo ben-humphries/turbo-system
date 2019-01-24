@@ -26,6 +26,8 @@ struct Entity {
 	virtual void initialize();
 	virtual void update();
 	virtual void render(Camera * camera);
+	List<uint8_t> base_serialize();
+	void base_unserialize(uint8_t * buffer);
 };
 
 void update_entity_tree(Entity * root);

@@ -32,6 +32,33 @@ void Entity::add_child(Entity * entity)
 	entity->parent = this;
 }
 
+List<uint8_t> Entity::base_serialize()
+{
+	List<uint8_t> buffer;
+	buffer.alloc();
+	{ // name
+		for (int i = 0; i < strlen(name); i++) {
+			buffer.push(name[i]);
+		}
+		buffer.push(0x00);
+	}
+	return buffer;
+}
+
+void Entity::base_unserialize(uint8_t * buffer)
+{
+	{ // name
+		List<char> name_buffer;
+		name_buffer.alloc();
+		size_t i = 0;
+		while (buffer[i] != 0x00) {
+			name_buffer.push(buffer[i++]);
+		}
+		name_buffer.push('\0');
+		this->name = name_buffer.arr;
+	}
+}
+
 void Entity::initialize() {}
 void Entity::update() {}
 void Entity::render(Camera * camera) {}

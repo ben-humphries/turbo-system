@@ -23,6 +23,7 @@
 #include "renderer.h"
 #include "camera.h"
 #include "entity.h"
+#include "serialize.h"
 
 struct Monkey : Entity {
 	Renderer::Model * model;
@@ -76,6 +77,12 @@ int main()
 		root->children[0]->add_child(m);
 	}
 
+	// Save entity tree as level file
+	serialize_tree_to_file(root, "res/test.level");
+
+	// Load entity tree from level file
+	root = unserialize_tree_from_file("res/test.level");
+	
 	// Main loop
 	SDL_Event event;
 	bool running = true;
